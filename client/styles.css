@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+
+body {
+  /* background-color: lightblue; */
+  background: url('https://images.unsplash.com/photo-1612528443702-f6741f70a049?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80');
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  font-family: 'Poppins', sans-serif;
+
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+.navbarHolder {
+  background-color: rgb(170, 196, 225);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.235);
+}
+
+.spacer {
+  height: 100px;
+  width: 100%;
+}
+.banner {
+  font-size: 2.5em;
+  margin: 0;
+}
+
+button {
+  color: white;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 5px;
+  margin: 0 8px;
+  font-size: 10px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.addButton {
+  background-color: green;
+}
+
+.removeButton {
+  background-color: red;
+}
+
+.login-Btn {
+  background-color: rgb(172, 119, 119);
+  height: 30px;
+  padding: 5px 10px;
+  margin: 20px;
+}
+
+.create-Btn {
+  background-color: rgb(142, 120, 190);
+  height: 30px;
+  padding: 5px 10px;
+  margin: 20px;
+  margin-top: 60px;
+}
+
+.login-Btn:hover,
+.create-Btn:hover {
+  transform: scale(98%);
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.submitButton {
+  background-color: rgb(15, 173, 68);
+  border: none;
+  outline: none;
+  border-radius: 3px;
+}
+
+.submitButton:hover {
+  transform: scale(98%);
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.submitItem {
+  border: none;
+  outline: none;
+  border-radius: 3px;
+}
+
+.signInForm,
+.loginForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.textStyle {
+  margin-right: 10px;
+  font-size: 14px;
+  overflow-y: auto;
+}
+
+.listStyle {
+  background-color: white;
+  border-radius: 12px;
+  width: 300px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.columnStyle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.containerStyle {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: 5em;
+}
+
+.visitedBreweries {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.navbarContainer {
+  position: fixed;
+  width: 100%;
+  height: 20%;
+  background-color: burlywood;
+}
+
+.brand {
+  font-size: 24px;
+}
+.nav_links {
+  font-size: 20px;
+  list-style: none;
+}
+
+.nav_links li {
+  display: inline-block;
+  padding: 0px 20px;
+}
+
+.brand,
+.nav_links {
+  font-family: 'Poppins', 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: #ededed;
+  text-decoration: none;
+}
+
+header {
+  background-color: #313030;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.logout-Btn {
+  /* border-style: solid;
+  border-color: red; */
+  border-width: 2px;
+  padding: 0.5em 1em;
+  background-color: rgba(249, 228, 26, 1);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  text-decoration: none;
+  margin-right: 1em;
+  color: #313030;
+}
+
+.logout-Btn:hover {
+  background-color: rgba(249, 228, 26, 0.8);
+  text-decoration: none;
+}
+
+footer {
+  background-color: #575555;
+  display: flex;
+  color: #ededed;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.userlanding {
+  margin-top: 5em;
+}
