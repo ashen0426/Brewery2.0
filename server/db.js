@@ -2,7 +2,7 @@ const { Pool } = require("pg");
 // const userQueries = require("./userQueries");
 
 const PG_URI =
-  "postgres://wbarptmk:bdbDaZLOe-1MSrjDHG_hR9qb6g17d-sD@isilo.db.elephantsql.com/wbarptmk";
+  "postgres://vjmkyjoo:9Gc-BYRAMhyq8cK67YG-8W-rQqHLp_Xs@isilo.db.elephantsql.com/vjmkyjoo";
 
 const pool = new Pool({
   connectionString: PG_URI,
