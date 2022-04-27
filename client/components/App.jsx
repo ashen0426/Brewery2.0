@@ -54,7 +54,7 @@ const App = () => {
             <Route exact path='/login' element={<Login />}></Route>
             <Route exact path='/createuser' element={<CreateUser />}></Route>
             <Route exact path='/userlanding' element={<UserLanding />}></Route>
-            <Route path='*' element={<Navigate to='/' replace />}></Route>
+            <Route path='/*' element={<Navigate to='/' replace />}></Route>
           </Routes>
           <Footer />
         </div>

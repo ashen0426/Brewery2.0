@@ -22,7 +22,6 @@ app.use("/visited", visitRouter);
 
 app.use("/client", express.static(path.resolve(__dirname, "../client")));
 
-
 app.get('/', (req, res) => {
   res.status(200).sendFile(path.join(__dirname, '../client/template.html'));
 });
@@ -37,7 +36,6 @@ app.get('/login', userController.checkUser, (req, res) => {
 app.get('/getUser/:username', userController.getUser, (req, res) => {
   res.status(200).json(res.locals.userInfo);
 })
-
 
 app.post('/createUser', userController.createUser,  (req, res) => {
   res.json(res.locals.users);
@@ -55,10 +53,10 @@ app.post('/login', userController.verifyLogin, userController.setCookie, userCon
   res.status(200).json(res.locals.userInfo);
 });
 
-app.get('/', (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, '../client/template.html'));
+// app.get('/', (req, res) => {
+//   res.status(200).sendFile(path.join(__dirname, '../client/template.html'));
 
-});
+// });
 
 // ERROR HANDLER
 //invoked if you pass an argument to next()
