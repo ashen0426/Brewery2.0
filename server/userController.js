@@ -18,9 +18,9 @@ userController.createUser = async (req, res, next) => {
     } catch (err) {
       next({
         log: `userController.createUser: ERROR: Error during creation of a new user.`,
-        message: { err: 'Error occurred in userController.createUser.' }
+        message: { err: 'Error occurred in userController.createUser.'}
       });
-    }
+  }
   }
 };
 
@@ -32,11 +32,12 @@ userController.verifyLogin = async (req, res, next) => {
       const queryString = `SELECT password FROM users WHERE username = $1`;
       const value = [username];
       try {
-        const dbPassword = db.query(queryString, value);
-        if (!dbPassword.rows[0]) {
+        const dbResults = await db.query(queryString, value);
+        const dbPassword = dbResults.rows[0].password;
+        if (!dbPassword) {
           return res.send('Username does not exist');
         }
-        if (await bcrypt.compare(password, dbPassword.rows[0].password)) {
+        if (bcrypt.compare(password, dbPassword)) {
           console.log('Passwords match!!!');
           return next();
         } else {
@@ -44,7 +45,7 @@ userController.verifyLogin = async (req, res, next) => {
         } 
       } catch (err) {
         next({
-          log: `userController.verifyLogin: ERROR: Error during username and password verification.`,
+          log: `userController.verifyLogin: ERROR: ${err}`,
           message: { err: 'Error occurred in userController.verifyLogin.'}
         });
       }
