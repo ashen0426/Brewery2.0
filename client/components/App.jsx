@@ -8,7 +8,7 @@ import React, { createContext } from 'react';
 import Login from './Login';
 import CreateUser from './CreateUser';
 import Home from './Home';
-// import UserContext from './UserDetails';
+import {UserProvider} from './UserDetails';
 import UserLanding from './UserLanding';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -38,11 +38,11 @@ const App = () => {
   //Set user information here on load through useeffect?
   // const [userInfo, setUserInfo] = useState('');
 
-  const [user, setUser] = useState(undefined)
-  UserContext = createContext(undefined)
+  // const [user, setUser] = useState(undefined)
+  // UserContext = createContext(undefined)
 
   return (
-    <UserContext.Provider value={user}>
+    <UserProvider>
       <Router>
         <div className='App'>
           <div className='navbarHolder'>
@@ -59,7 +59,7 @@ const App = () => {
           <Footer />
         </div>
       </Router>
-    </UserContext.Provider>
+    </UserProvider>
   );
 };
 

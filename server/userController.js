@@ -82,7 +82,7 @@ userController.checkUser = (req, res, next) => {
 }
 
 userController.getUser = async (req, res, next) => {
-  const { username } = req.body.userInfo;
+  const { username } = req.params;
   const returnOneUser = `SELECT * FROM users WHERE username = $1`;
   try {
     const response = await db.query(returnOneUser, [username]);

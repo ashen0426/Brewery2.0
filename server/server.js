@@ -34,7 +34,7 @@ app.get('/login', userController.checkUser, (req, res) => {
 });
 
 
-app.get('/getUser', userController.getUser, (req, res) => {
+app.get('/getUser/:username', userController.getUser, (req, res) => {
   res.status(200).json(res.locals.userInfo);
 })
 
