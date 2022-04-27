@@ -5,9 +5,6 @@ const brewController = {};
 
 brewController.getBreweries = async (req, res, next) => {
   const userState = req.params.state;
-  if (userState.includes(' ')) {
-    userState = userState.replace(' ', '_');
-  }
   const options = {
     method: 'GET',
     url: `https://api.openbrewerydb.org/breweries?by_state=${userState}`,
@@ -29,21 +26,29 @@ brewController.getBreweries = async (req, res, next) => {
   }
 };
 
-brewController.getVisited = (req, res, next) => {
+brewController.getVisited = async (req, res, next) => {
   let username;
   if (req.params.username) {
     username = req.params.username;
   } else {
     username = res.locals.username; //coming from addVisited controller
   }
-  const queryString = `SELECT * FROM uservisited WHERE userid = $1`;
+  // gets userId from a supplied username
+  const userIdSelector = `SELECT id FROM users WHERE username = '${username}'`;
+  const getUserId = await db.query(userIdSelector);
+
+  // queries for the list of breweries based on userId
+  const queryString = `SELECT breweryname, brewerytype, brewerystate, brewerycity, breweryphone 
+                      FROM breweries b 
+                      INNER JOIN uservisited uv ON b.breweryid = uv.breweryid
+                      INNER JOIN users u ON uv.userid = u.id WHERE u.id = ${getUserId}`;
   try {
     const visits = db.query(queryString, [username]);
     res.locals.visited = visits.rows;
     return next();
   } catch (err) {
     next({
-      log: `brewController.geVisited: ERROR: Error query breweries API by id: ${userId}.`,
+      log: `brewController.geVisited: ERROR: ${err.message}, error querying for the list of visited breweries by id: ${userId}.`,
       message: { err: 'Error occurred in brewController.getVisited.'}
     });
   }
@@ -76,7 +81,7 @@ brewController.deleteVisitedBrew = async (req, res, next) => {
     console.log('AFTER DESTRUCTURING');
     // const text = `DELETE FROM visited WHERE userid = $1 RETURNING *`;
     // const values = [userId];
-    const text = `DELETE FROM visited WHERE userid = $1 AND breweryname = $2 RETURNING *`;
+    const text = `DELETE FROM uservisited WHERE userid = $1 AND breweryname = $2 RETURNING *`;
     const values = [userId, breweryname];
     // console.log(`userId: ${userId}`);
 
@@ -96,57 +101,43 @@ brewController.deleteVisitedBrew = async (req, res, next) => {
     return next();
   } catch (err) {
     next({
-      log: `brewController.deleteVisitedBrew: ERROR: Error deleting from visited table by userId: ${userState} and breweryname: ${breweryname}.`,
+      log: `brewController.deleteVisitedBrew: ERROR: ${err.message}, error deleting from visited table by userId: ${userId} and breweryname: ${breweryname}.`,
       message: { err: 'Error occurred in brewController.deleteVisitedBrew.'}
     });
   }
 };
 
 brewController.addVisited = async (req, res, next) => {
-  //// I AM NOT sure if this is how I would add new IDs to the res.locals object. I know that it would need to be an array
-  /// WHEN IT COMES BACK FROM THE DB ///
   try {
-    const {
-      breweryid,
-      breweryname,
-      brewerytype,
-      brewerystate,
-      brewerycity,
-      breweryphone,
-      userId,
-    } = req.body.addVisited;
-    console.log(`Destructured from Post Request`);
-    // console.log(req.query.userId);
-    // let userId = req.params.userId;
-    console.log(`UserID ${userId}`);
+    const { userId, breweryname } = req.body;
     res.locals.userid = userId;
-    // const queryString = `INSERT INTO visited (userid, breweryid, breweryname, brewerytype, brewerystate, brewerycity, breweryphone) VALUES (${userId}, ${breweryid}, ${breweryname}, ${brewerytype}, ${brewerystate}, ${brewerycity}, ${breweryphone})`;
-    const text = `INSERT INTO visited (userid, breweryid, breweryname, brewerytype, brewerystate, brewerycity, breweryphone) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`;
-    const values = [
-      userId,
-      breweryid,
-      breweryname,
-      brewerytype,
-      brewerystate,
-      brewerycity,
-      breweryphone,
-    ];
-    // const queryString = `INSERT INTO visited (userid, breweryid, breweryname, brewerytype, brewerystate, brewerycity, breweryphone) VALUES (${userId}, ${breweryid}, ${breweryname}, ${brewerytype}, ${brewerystate}, ${brewerycity}, ${breweryphone})`;
-    // const queryString = `INSERT INTO visited (userid, breweryid, breweryname, brewerytype, brewerystate, brewerycity, breweryphone) VALUES (${userId}, ${breweryid}, ${breweryname}, ${brewerytype}, ${brewerystate}, ${brewerycity}, ${breweryphone})`;
-    // const queryString = `INSERT INTO visited (id, userid, breweryid, breweryname, brewerytype, brewerystate, brewerycity, breweryphone) VALUES (${11}, ${1}, ${17}, ${'Amber'}, ${brewerytype}, ${'York'}, ${'LIC'}, ${breweryphone})`;
-    // const queryString = `INSERT INTO visited (userid, breweryid, breweryname, brewerytype, brewerystate, brewerycity, breweryphone) VALUES (${1}, ${'testbrew'}, ${'testbrew9'}, ${'micro'}, ${'new_york'}, ${'NYC'}, ${'452413421'})`;
-    // await db.query(queryString);
-    await db.query(text, values, (err, res) => {
-      if (err) {
-        console.log(err.stack);
-      } else {
-        console.log(res.rows[0]);
-      }
-    });
-    return next();
+
+    // checks for brewery in database
+    const checkForBrewery = `SELECT * FROM breweries WHERE breweryid = ${breweryid}`;
+    const breweryPresentAlready = db.query(checkForBrewery);
+
+    // if not found, adds it into the breweries table
+    if (!breweryPresentAlready) {
+      const text = `INSERT INTO breweries (breweryid, breweryname, brewerytype, brewerystate, brewerycity, breweryphone) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`;
+      const values = [userId, breweryid, breweryname, brewerytype, brewerystate, brewerycity, breweryphone];
+      await db.query(text, values);
+    }
+
+    // checks for userId and breweryname in join table
+    const checkJoinTable = `SELECT * FROM uservisited WHERE uservisited.userid = $1 and uservisited.breweryname = $2 RETURNING *`;
+    const joinValues = [userId, breweryname];
+    const alreadyOnVisitedTable = await db.query(checkJoinTable, joinValues);
+
+    // if it's not found in the join table, adds a row for them
+    if (!alreadyOnVisitedTable) {
+      const text = `INSERT INTO userVisited (userid, breweryid, liked, visited) VALUES ($1,$2,$3,$4) RETURNING *`; 
+      const values = [userId, breweryid, false, true];
+      await db.query(text, values);
+      return next();
+    }
   } catch (err) {
     next({
-      log: `brewController.addVisited: ERROR: Error inserting into visited table.`,
+      log: `brewController.addVisited: ERROR: ${err.message}, error inserting into visited table.`,
       message: { err: 'Error occurred in brewController.addVisited.'}
     });
   }
