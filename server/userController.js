@@ -96,19 +96,19 @@ userController.getUser = async (req, res, next) => {
 }
 
 userController.deleteUser = async (req, res, next) => {
-    const { userId } = req.body;
-    const text = `DELETE FROM users WHERE userid = $1 RETURNING *`;
-    const values = [userId];
-    try {
-      db.query(text, values);
-      return next();
-    } catch (err) {
-      next({
-        log: `userController.deleteUser: ERROR: Error deleting a row from users table.`,
-        message: { err: 'Error occurred in userController.deleteUser.'}
-      });
-    }
+  const { userId } = req.body;
+  const text = `DELETE FROM users WHERE userid = $1 RETURNING *`;
+  const values = [userId];
+  try {
+    db.query(text, values);
+    return next();
+  } catch (err) {
+    next({
+      log: `userController.deleteUser: ERROR: Error deleting a row from users table.`,
+      message: { err: 'Error occurred in userController.deleteUser.'}
+    });
   }
+}
 
 
 module.exports = userController;
