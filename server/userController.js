@@ -108,6 +108,7 @@ userController.deleteUser = async (req, res, next) => {
       });
     }
   }
+}
 
 
 module.exports = userController;
