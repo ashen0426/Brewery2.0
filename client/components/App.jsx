@@ -8,7 +8,7 @@ import React, { createContext } from 'react';
 import Login from './Login';
 import CreateUser from './CreateUser';
 import Home from './Home';
-import UserContext from './UserDetails';
+// import UserContext from './UserDetails';
 import UserLanding from './UserLanding';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -32,13 +32,14 @@ import Footer from './Footer';
 // };
 
 //If don't want user logged in then uncomment below....
-const user = undefined;
+// const user = undefined;
 
 const App = () => {
   //Set user information here on load through useeffect?
   // const [userInfo, setUserInfo] = useState('');
 
-  // const [user, setUser] = useState(undefined)
+  const [user, setUser] = useState(undefined)
+  UserContext = createContext(undefined)
 
   return (
     <UserContext.Provider value={user}>

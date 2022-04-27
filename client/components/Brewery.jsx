@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import UserContext from './UserDetails'
 
 const Brewery = (props) => {
-  const user = useContext(UserContext)
+  const user = this.context;
   const breweryComp = props.breweryComp
   let bAttribs = {}
 

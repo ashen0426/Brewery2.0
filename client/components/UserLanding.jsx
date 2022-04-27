@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import StateBreweries from './StateBreweries';
 import VisitedBreweries from './VisitedBreweries';
-import UserContext from './UserDetails';
+// import UserContext from './UserDetails';
 import axios from 'axios';
 
 const UserLanding = () => {

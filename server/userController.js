@@ -82,10 +82,10 @@ userController.checkUser = (req, res, next) => {
 }
 
 userController.getUser = async (req, res, next) => {
-  const { username } = req.body;
-  const returnOneUser = `SELECT * FROM users WHERE username = ${username}`;
+  const { username } = req.body.userInfo;
+  const returnOneUser = `SELECT * FROM users WHERE username = $1`;
   try {
-    const response = db.query(returnOneUser);
+    const response = await db.query(returnOneUser, [username]);
     res.locals.userInfo = response.rows[0];
     return next();
   } catch (err) {

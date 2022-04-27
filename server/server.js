@@ -51,8 +51,8 @@ app.delete('/deleteUser',  userController.deleteUser, (req, res) => {
 
 
 
-app.post('/login', userController.verifyLogin, userController.setCookie, (req, res) => {
-  res.status(200).send('Login Success');
+app.post('/login', userController.verifyLogin, userController.setCookie, userController.getUser, (req, res) => {
+  res.status(200).json(res.locals.userInfo);
 });
 
 app.get('/', (req, res) => {
