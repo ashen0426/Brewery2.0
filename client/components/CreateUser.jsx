@@ -44,7 +44,7 @@ const CreateUser = () => {
           <div>
             <input
 
-              autocomplete="off"
+              autoComplete="off"
               className="submitItem"
               name="username"
               type="text"
@@ -57,7 +57,7 @@ const CreateUser = () => {
           <div>
             <input
 
-              autocomplete="off"
+              autoComplete="off"
               className="submitItem"
               name="password"
               type="password"
@@ -69,7 +69,7 @@ const CreateUser = () => {
           <div>
             <input
 
-              autocomplete="off"
+              autoComplete="off"
               className="submitItem"
               name="homestate"
               type="text"
@@ -81,7 +81,7 @@ const CreateUser = () => {
           <div>
             <input
 
-              autocomplete="off"
+              autoComplete="off"
               className="submitItem"
               name="firstname"
               type="text"
@@ -93,7 +93,7 @@ const CreateUser = () => {
           <div>
             <input
 
-              autocomplete="off"
+              autoComplete="off"
               className="submitItem"
               name="firstname"
               type="text"
