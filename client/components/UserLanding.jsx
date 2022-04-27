@@ -17,7 +17,7 @@ const UserLanding = () => {
       if (user) {
         try {
           const response = await axios.get('/api', {
-            params: { state: user.state, id: user.usersid },
+            params: { homestate: user.homestate, username: user.username },
           })
           setStateBreweries(response.data.getBreweries)
           setVisBreweries(response.data.visited)

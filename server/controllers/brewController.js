@@ -4,7 +4,7 @@ const db = require('../db.js');
 const brewController = {};
 
 brewController.getBreweries = async (req, res, next) => {
-  const userState = req.query.state;
+  const userState = req.params.state;
   if (userState.includes(' ')) {
     userState = userState.replace(' ', '_');
   }
@@ -30,17 +30,15 @@ brewController.getBreweries = async (req, res, next) => {
 };
 
 brewController.getVisited = (req, res, next) => {
-  let userID;
-  if (req.query.id) {
-    userID = req.query.id;
-  } else if (req.params.id) {
-    userID = req.params.id;
+  let username;
+  if (req.params.username) {
+    username = req.params.username;
   } else {
-    userID = res.locals.userid; //coming from addVisited controller
+    username = res.locals.username; //coming from addVisited controller
   }
-  const queryString = `SELECT * FROM visited WHERE userid = ${userID}`;
+  const queryString = `SELECT * FROM uservisited WHERE userid = $1`;
   try {
-    const visits = db.query(queryString);
+    const visits = db.query(queryString, [username]);
     res.locals.visited = visits.rows;
     return next();
   } catch (err) {
