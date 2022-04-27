@@ -3,8 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useUserUpdate } from './UserDetails'
 
-// import UserContext from './UserDetails'
-
 const Login = (props) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')

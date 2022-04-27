@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import UserContext from './UserDetails'
+import UserContext from './UserContext'
 import Brewery from './Brewery'
 import axios from 'axios'
 
