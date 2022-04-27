@@ -29,11 +29,19 @@ app.get('/', (req, res) => {
 
 app.get('/login', userController.checkUser, (req, res) => {
   res.status(200);
+});
+app.get('/getUser', userController.getUser, (req, res) => {
+  res.status(200).json(res.locals.userInfo);
 })
+
 
 app.post('/createUser', userController.createUser,  (req, res) => {
   res.json(res.locals.users);
 });
+
+app.delete('/deleteUser', userController.deleteUser, (req, res) => {
+  res.status(200).json('You have succesfully deleted the user.');
+})
 
 app.post(
   '/login',
