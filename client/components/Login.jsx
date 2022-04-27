@@ -40,7 +40,7 @@ const Login = () => {
           <div>
             <input
               autoFocus
-              autocomplete="off"
+              autoComplete="off"
               className="submitItem"
               name="username"
               type="text"
@@ -50,7 +50,7 @@ const Login = () => {
           </div>
           <div>
             <input
-              autocomplete="off"
+              autoComplete="off"
               className="submitItem"
               name="password"
               type="password"
