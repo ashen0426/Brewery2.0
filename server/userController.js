@@ -69,9 +69,9 @@ userController.setCookie = (req, res, next) => {
 userController.checkUser = (req, res, next) => {
   try {
     if(!req.cookies) { 
-      next() 
+      return next();
     } else { 
-      res.sendFile(path.resolve(__dirname, '../client/components/UserLanding.jsx'));
+      res.redirect('/userlanding');
     };
   } catch (err) {
     next({
