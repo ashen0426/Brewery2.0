@@ -4,17 +4,9 @@ const brewController = require('../controllers/brewController');
 
 const router = express.Router();
 
-router.get(
-  '/',
-  brewController.getVisited,
-  brewController.getBreweries,
-  (req, res) => {
-    // console.log('made it back from controller to apiBrewRouter GET middleware');
-    // console.dir(`Local Brews: ${res.locals.visited}`);
-    // return res.status(200).json(res.locals.getBreweries, res.locals.visited);
-    return res.status(200).json(res.locals);
-  }
-);
+router.get('/', brewController.getVisited, brewController.getBreweries, (req, res) => {
+  return res.status(200).json(res.locals);
+});
 
 // ///////////////////////////////////////////////////////////////////////////
 // // Not sure if this is how to do the second get to ONLY getVisted //
