@@ -1,13 +1,15 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { useUserUpdate } from './UserDetails'
 
-import UserContext from './UserDetails'
+// import UserContext from './UserDetails'
 
-const Login = () => {
+const Login = (props) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   let navigate = useNavigate()
+  const getUserInfo = useUserUpdate();
 
   const handleSubmit = async (e) => {
     e.preventDefault() //So that form submission doesn't trigger a page refresh
@@ -21,7 +23,8 @@ const Login = () => {
         },
       })
       //If success then update context for logged in user and redirect them...
-      if (response.data === 'Login Success') {
+      if (response.data !== 'Incorrect password') {
+        getUserInfo(response.data.username);
         navigate('/userlanding') //if successfull, send to UserLanding route
       }
       console.log(response.data)
