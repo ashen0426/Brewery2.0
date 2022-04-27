@@ -34,7 +34,7 @@ const alreadyUsed = await db.query(queryString);
         // console.log(res.rows[0]);
       }
     });
-    console.log('INSERT CREATED');
+
     return next();
   } catch (err) {
     console.log(err);
@@ -89,5 +89,23 @@ userController.checkUser = (req, res, next) => {
     res.redirect('/userlanding');
   }
 }
+
+userController.getUser = async (req, res, next) => {
+  const { username } = req.body;
+  const returnOneUser = `SELECT * FROM users WHERE username = ${username}`;
+  db.query(returnOneUser)
+    .then((response) => {
+      console.log("response: ", response);
+      res.locals.userInfo = response.rows[0];
+      return next();
+    })
+    .catch((error) => {
+      throw new Error({
+      log: 'error in the userController.getUser method',
+      message: { err: 'error in the userController.getUser method' }
+      });
+    });
+}
+
 
 module.exports = userController;
