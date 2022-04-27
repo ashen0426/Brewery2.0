@@ -22,7 +22,7 @@ const Login = () => {
       })
       //If success then update context for logged in user and redirect them...
       if (response.data === 'Login Success') {
-        navigate('/createuser') //if successfull, send to UserLanding route
+        navigate('/userlanding') //if successfull, send to UserLanding route
       }
       console.log(response.data)
     } catch (error) {
