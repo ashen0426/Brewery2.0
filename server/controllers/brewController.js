@@ -4,64 +4,49 @@ const db = require('../db.js');
 const brewController = {};
 
 brewController.getBreweries = async (req, res, next) => {
-  console.log('made it to the brewController.getBreweries');
-  // console.log(req.query.state);
   const userState = req.query.state;
-  // const userState = req.params.state;
-  console.log(userState);
-
-  // if (userState.includes(' ')) {
-  //   userState = userState.replace(' ', '_');
-  // }
-  // res.locals.breweries = 'ricky';
-  // return next();
-
+  if (userState.includes(' ')) {
+    userState = userState.replace(' ', '_');
+  }
+  const options = {
+    method: 'GET',
+    url: `https://api.openbrewerydb.org/breweries?by_state=${userState}`,
+    headers: {
+      Accept: 'application/json',
+    }
+  };
   try {
-    const options = {
-      method: 'GET',
-      url: `https://api.openbrewerydb.org/breweries?by_state=${userState}`,
-      headers: {
-        Accept: 'application/json',
-      },
-    };
     await axios(options).then((response) => {
       const breweries = response.data;
       res.locals.getBreweries = breweries;
     });
     return next();
   } catch (err) {
-    throw new Error({
-      log: 'error in the brewController getBrews method',
-      message: { err: 'error in the brewController getBrews method' },
+    next({
+      log: `brewController.getBreweries: ERROR: Error query breweries API by state: ${userState}.`,
+      message: { err: 'Error occurred in brewController.getBreweries.'}
     });
   }
 };
 
-brewController.getVisited = async (req, res, next) => {
-  ////// getFaves to Do ////////
-  // console.log(`MADE IT TO getVISITED`);
+brewController.getVisited = (req, res, next) => {
   let userID;
-
   if (req.query.id) {
     userID = req.query.id;
   } else if (req.params.id) {
-    req.params.id;
+    userID = req.params.id;
   } else {
     userID = res.locals.userid; //coming from addVisited controller
   }
-
-  //       /:id for getting req.params.id
   const queryString = `SELECT * FROM visited WHERE userid = ${userID}`;
   try {
-    const visits = await db.query(queryString);
+    const visits = db.query(queryString);
     res.locals.visited = visits.rows;
-    console.log(`IN getVISITED res.locals.visited: ${res.locals.visited}`);
-    console.log(res.locals.visited);
     return next();
   } catch (err) {
-    throw new Error({
-      log: 'error in the brewController getVisited method',
-      message: { err: 'error in the brewController getVisited method' },
+    next({
+      log: `brewController.geVisited: ERROR: Error query breweries API by id: ${userId}.`,
+      message: { err: 'Error occurred in brewController.getVisited.'}
     });
   }
 };
@@ -112,9 +97,9 @@ brewController.deleteVisitedBrew = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    throw new Error({
-      log: 'error in the brewController deleteVisitedBrews method',
-      message: { err: 'error in the brewController deleteVisitedBrews method' },
+    next({
+      log: `brewController.deleteVisitedBrew: ERROR: Error deleting from visited table by userId: ${userState} and breweryname: ${breweryname}.`,
+      message: { err: 'Error occurred in brewController.deleteVisitedBrew.'}
     });
   }
 };
@@ -162,11 +147,10 @@ brewController.addVisited = async (req, res, next) => {
     });
     return next();
   } catch (err) {
-    console.log(err);
-    // throw new Error({
-    //   log: 'error in the brewController deleteVisitedBrews method',
-    //   message: { err: 'error in the brewController deleteVisitedBrews method' },
-    // });
+    next({
+      log: `brewController.addVisited: ERROR: Error inserting into visited table.`,
+      message: { err: 'Error occurred in brewController.addVisited.'}
+    });
   }
 };
 
