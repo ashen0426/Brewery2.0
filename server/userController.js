@@ -5,107 +5,109 @@ const db = require('./db.js');
 const userController = {};
 
 userController.createUser = async (req, res, next) => {
-  /*
-//FOR GETTING ALL 'ALREADY USED USERNAMES' PASSWORDS FROM USER TABLE IN DB
-const queryString = `SELECT username FROM users`
-const alreadyUsed = await db.query(queryString);
-*/
-
-  console.log(`Entering Create Username`);
-
-  try {
-    if (!req.body.newUser.username || !req.body.newUser.password)
-      return next('missing username or password in createUser');
-
-    const { firstname, lastname, homestate, username, password } =
-      req.body.newUser;
-
-    console.log(req.body.newUser);
-
-    //use bcrypt to hash the password, salting it 10 times
+  const { firstname, lastname, homestate, username, password } = req.body.newUser;
+  if (!username || !password) {
+    return next('Missing username or password in createUser');
+  } else {
     const hashedPassword = await bcrypt.hash(password, 10);
     const queryString = `INSERT INTO users (firstname, lastname, homestate, username, password) VALUES ($1, $2, $3, $4, $5)`;
     const value = [firstname, lastname, homestate, username, hashedPassword];
-    db.query(queryString, value, (err, res) => {
-      if (err) {
-        console.log('ERROR WITH QUERY');
-        console.log(err.stack);
-      } else {
-        // console.log(res.rows[0]);
-      }
-    });
-
-    return next();
-  } catch (err) {
-    console.log(err);
-    res.redirect('/createuser');
+    try {
+      db.query(queryString, value);
+      return next();
+    } catch (err) {
+      next({
+        log: `userController.createUser: ERROR: Error during creation of a new user.`,
+        message: { err: 'Error occurred in userController.createUser.'}
+      });
   }
 };
+}
 
 userController.verifyLogin = async (req, res, next) => {
-  console.log('ENTERING veryfiy login');
-  console.log(`Request Body User Info${req.body.userInfo}`);
-  console.log(req.body.userInfo);
-  if (req.body.userInfo.username == null)
-    return res.status(400).send('Must provide a username');
-  if (req.body.userInfo.password == null)
-    return res.status(400).send('Must provide a password');
-
-  try {
-    const queryString = `SELECT password FROM users WHERE username='${req.body.userInfo.username}'`;
-    const value = [req.body.userInfo.username];
-    const dbPassword = await db.query(queryString);
-    console.log(dbPassword.rows); ///dbPassword is rows object so need to access rows[0].password to get retrieved password
-    if (!dbPassword.rows[0]) return res.send('Username does not exist');
-    // if (await bcrypt.compare(req.body.userInfo.password, dbPassword)) {
-    if (
-      await bcrypt.compare(
-        req.body.userInfo.password,
-        dbPassword.rows[0].password
-      )
-    ) {
-      console.log('Passwords match!!!');
-      next();
-    } else {
-      res.send('Incorrect password');
-      // ressend('Incorrect password');
-    }
-  } catch (err) {
-    console.log(err);
+  const { username, password } = req.body.userInfo;
+  if (!username || !password) {
+    return res.status(400).send('Missing username or password in userController.verifyLogin.');
+  } else {
+      const queryString = `SELECT password FROM users WHERE username = $1`;
+      const value = [username];
+      try {
+        const dbPassword = db.query(queryString, value);
+        if (!dbPassword.rows[0]) {
+          return res.send('Username does not exist');
+        }
+        if (await bcrypt.compare(password, dbPassword.rows[0].password)) {
+          console.log('Passwords match!!!');
+          return next();
+        } else {
+          return res.status(401).send('Incorrect password');
+        } 
+      } catch (err) {
+        next({
+          log: `userController.verifyLogin: ERROR: Error during username and password verification.`,
+          message: { err: 'Error occurred in userController.verifyLogin.'}
+        });
+      }
   }
 };
 
 userController.setCookie = (req, res, next) => {
   // set cookie with a name, value (in this case the username)
   // httpOnly prevents the client from editing cookie in the browser
-  res.cookie('BrewCookie', req.body.userInfo.username, { httpOnly: true });
-  return next();
+  try {
+    res.cookie('BrewCookie', req.body.userInfo.username, { httpOnly: true });
+    return next();
+  } catch (err) {
+    next({
+      log: `userController.setCookie: ERROR: Error adding a cookie to the response object.`,
+      message: { err: 'Error occurred in userController.setCookie.'}
+    });
+  }
 };
 
 userController.checkUser = (req, res, next) => {
-  if(!req.cookies) { 
-    next() 
-  } else { 
-    res.redirect('/userlanding');
+  try {
+    if(!req.cookies) { 
+      next() 
+    } else { 
+      res.sendFile(path.resolve(__dirname, '../client/components/UserLanding.jsx'));
+    };
+  } catch (err) {
+    next({
+      log: `userController.checkUser: ERROR: Error checking for a cookie in the request object.`,
+      message: { err: 'Error occurred in userController.checkUser.'}
+    });
   }
 }
 
 userController.getUser = async (req, res, next) => {
   const { username } = req.body;
   const returnOneUser = `SELECT * FROM users WHERE username = ${username}`;
-  db.query(returnOneUser)
-    .then((response) => {
-      console.log("response: ", response);
-      res.locals.userInfo = response.rows[0];
-      return next();
-    })
-    .catch((error) => {
-      throw new Error({
-      log: 'error in the userController.getUser method',
-      message: { err: 'error in the userController.getUser method' }
-      });
+  try {
+    const response = db.query(returnOneUser);
+    res.locals.userInfo = response.rows[0];
+    return next();
+  } catch (err) {
+    next({
+      log: `userController.getUser: ERROR: Error retrieving a row from users table.`,
+      message: { err: 'Error occurred in userController.getUser.'}
     });
+  }
 }
 
+userController.deleteUser = async (req, res, next) => {
+    const { userId } = req.body;
+    const text = `DELETE FROM users WHERE userid = $1 RETURNING *`;
+    const values = [userId];
+    try {
+      db.query(text, values);
+      return next();
+    } catch (err) {
+      next({
+        log: `userController.deleteUser: ERROR: Error deleting a row from users table.`,
+        message: { err: 'Error occurred in userController.deleteUser.'}
+      });
+    }
+  }
 
 module.exports = userController;
