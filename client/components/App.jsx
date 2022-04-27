@@ -32,11 +32,13 @@ import Footer from './Footer';
 // };
 
 //If don't want user logged in then uncomment below....
-const user = undefined;
+// const user = undefined;
 
 const App = () => {
   //Set user information here on load through useeffect?
   // const [userInfo, setUserInfo] = useState('');
+
+  // const [user, setUser] = useState(undefined)
 
   return (
     <UserContext.Provider value={user}>
