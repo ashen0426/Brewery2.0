@@ -6,7 +6,12 @@ db.query(returnAllUsers)
   .then((response) => {
     console.log("response: ", response);
   })
-  .catch((error) => console.log("error: ", error));
+  .catch((error) => {
+    next({
+      log: `userQueries.returnAllUsers: ERROR: ${error}`,
+      message: { error: 'Error occurred in userQueries.returnAllUsers.'}
+    });
+  })
 
 //return user by ID
 const id = req.query.id;
@@ -15,7 +20,12 @@ db.query(returnOneUser)
   .then((response) => {
     console.log("response: ", response);
   })
-  .catch((error) => console.log("error: ", error));
+  .catch((error) => {
+    next({
+      log: `userQueries.returnOneUser: ERROR: ${error}`,
+      message: { error: 'Error occurred in userQueries.returnOneUser.'}
+    });
+  })
 
 //insert new user into users table
 const addUser =
@@ -24,6 +34,12 @@ db.query(addUser)
   .then((response) => {
     console.log("response: ", response);
   })
-  .catch((error) => console.log("error: ", error));
+  .catch((error) => {
+    next({
+      log: `userQueries.addUser: ERROR: ${error}`,
+      message: { error: 'Error occurred in userQueries.addUser.'}
+    });
+  })
 
 module.exports = userQueries;
+

@@ -21,8 +21,8 @@ userController.createUser = async (req, res, next) => {
         message: { err: 'Error occurred in userController.createUser.'}
       });
   }
+  }
 };
-}
 
 userController.verifyLogin = async (req, res, next) => {
   const { username, password } = req.body.userInfo;
@@ -32,11 +32,12 @@ userController.verifyLogin = async (req, res, next) => {
       const queryString = `SELECT password FROM users WHERE username = $1`;
       const value = [username];
       try {
-        const dbPassword = db.query(queryString, value);
-        if (!dbPassword.rows[0]) {
+        const dbResults = await db.query(queryString, value);
+        const dbPassword = dbResults.rows[0].password;
+        if (!dbPassword) {
           return res.send('Username does not exist');
         }
-        if (await bcrypt.compare(password, dbPassword.rows[0].password)) {
+        if (bcrypt.compare(password, dbPassword)) {
           console.log('Passwords match!!!');
           return next();
         } else {
@@ -44,7 +45,7 @@ userController.verifyLogin = async (req, res, next) => {
         } 
       } catch (err) {
         next({
-          log: `userController.verifyLogin: ERROR: Error during username and password verification.`,
+          log: `userController.verifyLogin: ERROR: ${err}`,
           message: { err: 'Error occurred in userController.verifyLogin.'}
         });
       }
@@ -68,9 +69,9 @@ userController.setCookie = (req, res, next) => {
 userController.checkUser = (req, res, next) => {
   try {
     if(!req.cookies) { 
-      next() 
+      return next();
     } else { 
-      res.sendFile(path.resolve(__dirname, '../client/components/UserLanding.jsx'));
+      res.redirect('/userlanding');
     };
   } catch (err) {
     next({
@@ -91,6 +92,21 @@ userController.getUser = async (req, res, next) => {
     next({
       log: `userController.getUser: ERROR: Error retrieving a row from users table.`,
       message: { err: 'Error occurred in userController.getUser.'}
+    });
+  }
+}
+
+userController.deleteUser = async (req, res, next) => {
+  const { userId } = req.body;
+  const text = `DELETE FROM users WHERE userid = $1 RETURNING *`;
+  const values = [userId];
+  try {
+    db.query(text, values);
+    return next();
+  } catch (err) {
+    next({
+      log: `userController.deleteUser: ERROR: Error deleting a row from users table.`,
+      message: { err: 'Error occurred in userController.deleteUser.'}
     });
   }
 }

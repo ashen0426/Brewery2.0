@@ -12,8 +12,7 @@ const Home = () => {
     if (user) {
       navigate('/userlanding')
     }
-  }),
-    []
+  }, []);
 
   function loginClick() {
     navigate('/login')
