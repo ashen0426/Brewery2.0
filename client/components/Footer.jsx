@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import UserContext from './UserContext';
 
 const Footer = (props) => {
   // wrr - commented out the below line because we aren't using any usercontext
