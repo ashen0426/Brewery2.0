@@ -20,8 +20,9 @@ userController.createUser = async (req, res, next) => {
         log: `userController.createUser: ERROR: Error during creation of a new user.`,
         message: { err: 'Error occurred in userController.createUser.'}
       });
-  }
-};
+    }
+  };
+}
 
 userController.verifyLogin = async (req, res, next) => {
   const { username, password } = req.body.userInfo;
@@ -67,9 +68,9 @@ userController.setCookie = (req, res, next) => {
 userController.checkUser = (req, res, next) => {
   try {
     if(!req.cookies) { 
-      next() 
+      return next();
     } else { 
-      res.sendFile(path.resolve(__dirname, '../client/components/UserLanding.jsx'));
+      res.redirect('/userlanding');
     };
   } catch (err) {
     next({
@@ -107,7 +108,6 @@ userController.deleteUser = async (req, res, next) => {
         message: { err: 'Error occurred in userController.deleteUser.'}
       });
     }
-  }
 }
 
 

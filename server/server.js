@@ -27,9 +27,13 @@ app.get('/', (req, res) => {
   res.status(200).sendFile(path.join(__dirname, '../client/template.html'));
 });
 
+
+
 app.get('/login', userController.checkUser, (req, res) => {
   res.status(200);
 });
+
+
 app.get('/getUser', userController.getUser, (req, res) => {
   res.status(200).json(res.locals.userInfo);
 })
@@ -39,20 +43,17 @@ app.post('/createUser', userController.createUser,  (req, res) => {
   res.json(res.locals.users);
 });
 
-app.delete('/deleteUser', userController.deleteUser, (req, res) => {
+
+
+app.delete('/deleteUser',  userController.deleteUser, (req, res) => {
   res.status(200).json('You have succesfully deleted the user.');
 })
 
-app.post(
-  '/login',
-  userController.verifyLogin,
-  userController.setCookie,
-  (req, res) => {
-    res.status(200).send('Login Success');
-    // console.log('login success!');
-    // res.redirect('/userlanding');
-  }
-);
+
+
+app.post('/login', userController.verifyLogin, userController.setCookie, (req, res) => {
+  res.status(200).send('Login Success');
+});
 
 app.get('/', (req, res) => {
   res.status(200).sendFile(path.join(__dirname, '../client/template.html'));
