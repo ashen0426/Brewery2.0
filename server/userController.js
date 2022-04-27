@@ -18,11 +18,11 @@ userController.createUser = async (req, res, next) => {
     } catch (err) {
       next({
         log: `userController.createUser: ERROR: Error during creation of a new user.`,
-        message: { err: 'Error occurred in userController.createUser.'}
+        message: { err: 'Error occurred in userController.createUser.' }
       });
     }
-  };
-}
+  }
+};
 
 userController.verifyLogin = async (req, res, next) => {
   const { username, password } = req.body.userInfo;
