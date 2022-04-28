@@ -5,15 +5,16 @@ const db = require('./db.js');
 const userController = {};
 
 userController.createUser = async (req, res, next) => {
-  const firstname = req.body.newUser.firstname;
-  res.locals.firstname = req.body.newUser.firstname;
-  const lastname = req.body.newUser.lastname;
-  res.locals.lastname = req.body.newUser.lastname;
-  const homestate = req.body.newUser.homestate;
-  res.locals.homestate = req.body.newUser.homestate;
-  const username = req.body.newUser.username;
-  res.locals.username = req.body.newUser.username;
-  const password = req.body.newUser.password;
+  const firstname = req.body.userInfo.firstname;
+  res.locals.firstname = req.body.userInfo.firstname;
+  const lastname = req.body.userInfo.lastname;
+  res.locals.lastname = req.body.userInfo.lastname;
+  const homestate = req.body.userInfo.homestate;
+  res.locals.homestate = req.body.userInfo.homestate;
+  const username = req.body.userInfo.username;
+  res.locals.username = req.body.userInfo.username;
+  const password = req.body.userInfo.password;
+
   if (!username || !password) {
     return next('Missing username or password in createUser');
   } else {

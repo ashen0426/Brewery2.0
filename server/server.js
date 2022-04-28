@@ -53,9 +53,6 @@ app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, b
   res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
 });
 
-// app.get('/', (req, res) => {
-//   res.status(200).sendFile(path.join(__dirname, '../client/template.html'));
-// });
 
 // ERROR HANDLER
 //invoked if you pass an argument to next()

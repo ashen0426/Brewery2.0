@@ -72,7 +72,7 @@ const UserLanding = () => {
 
     setVisBreweries([...response.data.visited])
   }
-  
+
   if (stateBreweries) {
 
     //Only rendering after mount side effect runs to retrieve state breweries
