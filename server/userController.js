@@ -6,7 +6,7 @@ const userController = {};
 
 userController.createUser = async (req, res, next) => {
   console.log(req.body.userInfo);
-  const {username, password, homestate, firstname, lastname } = req.body.userInfo;
+  const { username, password, homestate, firstname, lastname } = req.body.userInfo;
   // const firstname = req.body.newUser.firstname;
   // res.locals.firstname = req.body.newUser.firstname;
   // const lastname = req.body.newUser.lastname;
@@ -29,15 +29,14 @@ userController.createUser = async (req, res, next) => {
       return next();
     } catch (err) {
       next({
-        log: `userController.createUser: ERROR: Error during creation of a new user.`,
-        message: { err: 'Error occurred in userController.createUser.'}
+        log: `userController.createUser: ERROR: ${err}`,
+        message: { err: 'Error occurred in userController.createUser.' }
       });
+    }
   }
-}
 };
 
 userController.verifyLogin = async (req, res, next) => {
-  console.log('in verify login middleware');
   // const username = res.locals.username;
   // const password = res.locals.password;
   const username = req.body.userInfo.username;
@@ -83,21 +82,23 @@ userController.verifyLogin = async (req, res, next) => {
 
 userController.checkUser = (req, res, next) => {
   try {
-    if(!req.cookies) { 
+    if (!req.cookies) {
       return next();
-    } else { 
+    } else {
       res.redirect('/userlanding');
     };
   } catch (err) {
     next({
-      log: `userController.checkUser: ERROR: Error checking for a cookie in the request object.`,
-      message: { err: 'Error occurred in userController.checkUser.'}
+      log: `userController.checkUser: ERROR: ${err}`,
+      message: { err: 'Error occurred in userController.checkUser.' }
     });
   }
 }
 
 userController.getUser = async (req, res, next) => {
-  const { username } = req.params;
+  let username;
+  if(req.params.username) username = req.params.username;
+  else  username = req.body.userInfo.username;
   const returnOneUser = `SELECT * FROM users WHERE username = $1`;
   const value = [username];
   try {
@@ -107,7 +108,7 @@ userController.getUser = async (req, res, next) => {
   } catch (err) {
     next({
       log: `userController.getUser: ERROR: ${err}`,
-      message: { err: 'Error occurred in userController.getUser.'}
+      message: { err: 'Error occurred in userController.getUser.' }
     });
   }
 }
