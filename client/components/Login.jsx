@@ -20,6 +20,7 @@ const Login = (props) => {
           password: password,
         },
       })
+      console.log();
       //If success then update context for logged in user and redirect them...
       if (response.data !== 'Incorrect password') {
         context.setUser(response.data);

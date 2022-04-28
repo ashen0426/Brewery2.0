@@ -21,7 +21,7 @@ const Navbar = (props) => {
         <ul className='nav_links'>
           {user && (
             <li>
-              <Link className='logout-Btn' onClick={handleLogout}>
+              <Link to='/logout' className='logout-Btn' onClick={handleLogout}>
                 Logout
               </Link>
             </li>

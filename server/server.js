@@ -61,18 +61,18 @@ userController.deleteUser,
 
 app.post('/login', 
   userController.verifyLogin,
-  brewController.getBreweries,
+  userController.getUser,
   cookieController.session, 
   (req, res) => {
-  console.log('log in successful, sending back list of breweries'),
-  res.status(200).json(res.locals.getBreweries);
+  console.log('log in successful, sending back userInfo'),
+  res.status(200).json(res.locals.userInfo);
 });
 
 
-app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, userController.getUser, (req, res) => {
-  // console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.userInfo);
-  res.status(200).json(res.locals.userInfo); // do they need userInfo to be sent back?
-});
+// app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, userController.getUser, (req, res) => {
+//   // console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.userInfo);
+//   res.status(200).json(res.locals.userInfo); // do they need userInfo to be sent back?
+// });
 
 
 // ERROR HANDLER

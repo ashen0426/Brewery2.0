@@ -18,6 +18,7 @@ const UserLanding = () => {
       if (user) {
         try {
           const response = await axios.get(`/api?homestate=${user.homestate}&username=${user.username}&userId=${user.id}`)
+          console.log(response.data);
           setStateBreweries(response.data.getBreweries)
           setVisBreweries(response.data.visited)
         } catch (error) {
@@ -83,7 +84,7 @@ const UserLanding = () => {
           removeVisited={removeVisited}
         />
         <div>
-          <input className='deleteAccount' type='submit' value='true' color='red'>Delete Account</input>
+          {/* <input className='deleteAccount' type='submit' value='true' color='red'>Delete Account</input> */}
         </div>
       </div>
     )
