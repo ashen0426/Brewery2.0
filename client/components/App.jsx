@@ -4,7 +4,9 @@ import {
   Routes,
   Navigate,
 } from 'react-router-dom';
-import React, { createContext, useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
+
 import Login from './Login';
 import CreateUser from './CreateUser';
 import Home from './Home';
@@ -12,6 +14,7 @@ import UserContext from './UserDetails';
 import UserLanding from './UserLanding';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import axios from 'axios';
 //https://www.figma.com/file/2PRdto4pBE6alqIhw9eP4z/Brewery-App?node-id=0%3A1
 //List component----breweries in state
 //Already visited breweries
@@ -35,8 +38,6 @@ import Footer from './Footer';
 // const user = undefined;
 
 const App = () => {
-  //Set user information here on load through useeffect?
-  // const [userInfo, setUserInfo] = useState('');
 
   const [user, setUser] = useState(undefined);
   const value = {
@@ -57,7 +58,7 @@ const App = () => {
             <Route exact path='/login' element={<Login />}></Route>
             <Route exact path='/createuser' element={<CreateUser />}></Route>
             <Route exact path='/userlanding' element={<UserLanding />}></Route>
-            <Route path='*' element={<Navigate to='/' replace />}></Route>
+            <Route path='/*' element={<Navigate to='/' replace />}></Route>
           </Routes>
           <Footer />
         </div>

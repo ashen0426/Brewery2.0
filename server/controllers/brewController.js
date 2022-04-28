@@ -78,7 +78,9 @@ brewController.addBreweriesToDatabase = async (req, res, next) => {
 };
 
 brewController.getVisited = async (req, res, next) => {
-  let username = res.locals.username;
+  let username = req.query.username;
+  let userId = req.query.userId;
+  console.log('req.query in getvisted middleware', req.query);
   // let username;
   // if (req.query.username) {
   //   username = req.query.username;
@@ -93,7 +95,7 @@ brewController.getVisited = async (req, res, next) => {
                       INNER JOIN uservisited uv ON b.breweryid = uv.breweryid
                       INNER JOIN users u ON uv.userid = u.id WHERE u.id = ${getUserId} AND uv.visited = 'true'`;
   try {
-    const visits = db.query(queryString, [username]);
+    const visits = db.query(queryString, [userId]);
     res.locals.visited = visits.rows;
     return next();
   } catch (err) {

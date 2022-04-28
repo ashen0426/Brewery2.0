@@ -6,13 +6,14 @@ const cookieController = {};
 SESSION_TIME = 3000;
 
 cookieController.storeUserInfo = (req, res, next) => {
-    console.log('logging new user data', req.body.userInfo);
+    // console.log('logging new user data', req.body.userInfo);
     res.locals.username = req.body.userInfo.username;
-    res.locals.password = req.body.userInfo.password;
+    // res.locals.password = req.body.userInfo.password;
     // res.locals.username = req.body.userInfo.username;
     // res.locals.password = req.body.userInfo.password;
-    res.cookie('userName', req.body.userInfo.username);
-    console.log('in storeUserInfo cookie');
+    // set cookie to expire after 1 week
+    res.cookie('userName', req.body.userInfo.username, { expires: new Date(Date.now() + 604800000) });
+    // console.log('in storeUserInfo cookie');
     next();
 }
 
