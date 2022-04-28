@@ -29,13 +29,12 @@ userController.createUser = async (req, res, next) => {
       return next();
     } catch (err) {
       next({
-        log: `userController.createUser: ERROR: ${err}`,
+        log: `userController.createUser: ERROR: Error during creation of a new user.`,
         message: { err: 'Error occurred in userController.createUser.'}
       });
   }
 }
 };
-
 
 userController.verifyLogin = async (req, res, next) => {
   console.log('in verify login middleware');
@@ -56,10 +55,22 @@ userController.verifyLogin = async (req, res, next) => {
         }
         if (bcrypt.compare(password, dbPassword)) {
           console.log('Passwords match!!!');
+          const returnOneUser = `SELECT * FROM users WHERE username = $1`;
+          const value = [username];
+          try {
+            const response = await db.query(returnOneUser, value);
+            res.locals.userInfo = response.rows[0];
+            return next();
+          } catch (err) {
+            next({
+              log: `userController.getUser: ERROR: ${err}`,
+              message: { err: 'Error occurred in userController.getUser.'}
+            });
+          }
           return next();
         } else {
           return res.status(401).send('Incorrect password');
-        } 
+        }
       } catch (err) {
         next({
           log: `userController.verifyLogin: ERROR: ${err}`,
@@ -68,6 +79,7 @@ userController.verifyLogin = async (req, res, next) => {
       }
   }
 };
+
 
 userController.checkUser = (req, res, next) => {
   try {
@@ -78,7 +90,7 @@ userController.checkUser = (req, res, next) => {
     };
   } catch (err) {
     next({
-      log: `userController.checkUser: ERROR: ${err}`,
+      log: `userController.checkUser: ERROR: Error checking for a cookie in the request object.`,
       message: { err: 'Error occurred in userController.checkUser.'}
     });
   }
@@ -111,7 +123,7 @@ userController.deleteUser = async (req, res, next) => {
     return next();
   } catch (err) {
     next({
-      log: `userController.deleteUser: ERROR: ${err}`,
+      log: `userController.deleteUser: ERROR: Error deleting a row from users table.`,
       message: { err: 'Error occurred in userController.deleteUser.'}
     });
   }
