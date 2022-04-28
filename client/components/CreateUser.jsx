@@ -20,7 +20,7 @@ const CreateUser = () => {
     const user = { username, password }
     try {
       const response = await axios.post('/createUser', {
-        newUser: {
+        userInfo: {
           username: username,
           password: password,
           homestate: homestate,
