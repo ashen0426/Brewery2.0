@@ -81,6 +81,8 @@ const UserLanding = () => {
         },
       })
       //If success then update context for logged in user and redirect them...
+    } catch (error) {
+      console.log(error)
     }
     // params: { userId: user.usersid }, //Having trouble sending over user id as separate params
   }
