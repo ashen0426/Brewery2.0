@@ -31,11 +31,11 @@ const Navbar = (props) => {
             <li>
               <Link to='/logout' className='logout-Btn' onClick={handleLogout}>
                 Logout
-              </option>
               <option className='delete-Btn' onClick={handleDelete}>
                 Delete Account
               </option>
-            </select>
+            </Link>
+            </li>
           )}
         </ul>
       </header>

@@ -84,7 +84,7 @@ const UserLanding = () => {
       <div className="containerStyle">
         <div className='searchBarStyle'>
           <form placeholder='Search by State' onSubmit={handleSearch}></form>
-          <input className='searchButton' type='submit' value='search' >Search</input>
+          {/* <input className='searchButton' type='submit' value='search' >Search</input> */}
         </div>
         <StateBreweries
           stateBreweries={[...stateBreweries]}
