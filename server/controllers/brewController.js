@@ -19,26 +19,35 @@ brewController.getBreweries = async (req, res, next) => {
 };
 
 brewController.addBreweriesToDatabase = async (req, res, next) => {
-  const userState = req.body.userInfo.homestate;
-  console.log('in addBreweryToDatabase middleware and the userstate is ', userState);
-  let queryString = `SELECT EXISTS (SELECT FROM breweries WHERE brewerystate = '${userState}')`;
+  let userState = req.body.userInfo.homestate;
+
+  let arr = userState.split('_')
+  //console.log("!!!!!!!here!!!!!!!!", userState);
+  if(arr.length>1) userStateForDatabase = arr.join(' ')
+  else userStateForDatabase = userState;
+
+  console.log('user state:', userState);
+  console.log('user state for database:', userStateForDatabase);
+
+  console.log('in addBreweryToDatabase middleware and the userstate is ', userStateForDatabase);
+  let queryString = `SELECT EXISTS (SELECT FROM breweries WHERE brewerystate = '${userStateForDatabase}')`;
   //return next();
 
   const exist = await db.query(queryString);
   //variable.rows[0].exists
   
-  console.log('logging true or false:', exist.rows[0].exists);
+  //console.log('logging true or false:', exist.rows[0].exists);
   const value = exist.rows[0].exists
-  console.log('value is: ', value);
+  //console.log('value is: ', value);
 
-  console.log('comparing: ', value === true);
+  //console.log('comparing: ', value === true);
 
   if(value === true){
     console.log('the state exists');
-    queryString = `SELECT * FROM breweries WHERE breweryState = '${userState}'`;
+    queryString = `SELECT * FROM breweries WHERE breweryState = '${userStateForDatabase}'`;
     let breweries = await db.query(queryString);
     res.locals.getBreweries = breweries.rows;
-    console.log('logging breweries: ', breweries.rows);
+    //console.log('logging breweries: ', breweries.rows);
   }
   else{
     console.log('the state does not exist, need fetch from api');

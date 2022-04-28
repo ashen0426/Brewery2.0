@@ -46,6 +46,7 @@ app.post('/createUser',
   brewController.addBreweriesToDatabase, 
   cookieController.session,
   (req, res) => {
+  console.log('create user successful, sending back list of breweries'),
   res.status(200).json(res.locals.getBreweries); // sending back the brewery list 
 });
 
@@ -59,10 +60,11 @@ userController.deleteUser,
 
 
 app.post('/login', 
-  //cookieController.storeUserInfo,
-  userController.verifyLogin, 
+  userController.verifyLogin,
   brewController.getBreweries,
+  cookieController.session, 
   (req, res) => {
+  console.log('log in successful, sending back list of breweries'),
   res.status(200).json(res.locals.getBreweries);
 });
 

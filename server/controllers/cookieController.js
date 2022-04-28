@@ -19,7 +19,7 @@ cookieController.storeUserInfo = (req, res, next) => {
 
 cookieController.session = async (req, res, next) => {
     let userName = req.body.userInfo.username;
-    let queryString = `UPDATE users SET cookies = 'true' WHERE username = '${userName}'`;
+    let queryString = `UPDATE users SET hasCookie = 'true' WHERE username = '${userName}'`;
     await db.query(queryString);
     res.cookie('session', 'session alive', {expires: new Date(Date.now() + 86400), httpOnly: true});
     console.log('in startSession cookie');
