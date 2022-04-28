@@ -12,6 +12,11 @@ const router = express.Router();
 // });
 
 ///////////////////////////////////////////////////////////////////////////
+
+router.get('/:id', brewController.getVisited, (req, res) => {
+  return res.status(200).json(res.locals.visited);
+})
+
 router.delete('/delete', brewController.deleteVisitedBrew, brewController.getVisited, (req, res) => {
   return res.status(200).json(res.locals);
 });
