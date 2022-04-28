@@ -5,11 +5,12 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 const Navbar = (props) => {
   const user = useContext(UserContext).user;
   const setUser = useContext(UserContext).setUser;
+
   let navigate = useNavigate();
 
   const handleLogout = () => {
-    ``;
-    user = setUser(undefined);
+    console.log('handleLogout');
+    setUser(undefined);
     navigate('/');
   };
   const handleDelete = () => {
@@ -24,9 +25,8 @@ const Navbar = (props) => {
         {/*Leaving this as a UL/LI so that we want to add more navbar options */}
         <ul className='nav_links'>
           {user && (
-            <select className='accountOptions-Btn' >
-              <option disabled selected>Account Options</option>
-              <option className='logout-Btn' onClick={handleLogout} >
+            <li>
+              <Link className='logout-Btn' onClick={handleLogout}>
                 Logout
               </option>
               <option className='delete-Btn' onClick={handleDelete}>

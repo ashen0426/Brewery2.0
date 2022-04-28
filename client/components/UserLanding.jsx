@@ -17,10 +17,7 @@ const UserLanding = () => {
     const getBreweries = async () => {
       if (user) {
         try {
-          const response = await axios.get('/api', {
-            params: { homestate: user.homestate, username: user.username },
-          })
-          console.log('userlanding get response ', response)
+          const response = await axios.get(`/api?homestate=${user.homestate}&username=${user.username}&userId=${user.id}`)
           setStateBreweries(response.data.getBreweries)
           setVisBreweries(response.data.visited)
         } catch (error) {
@@ -72,20 +69,7 @@ const UserLanding = () => {
 
     setVisBreweries([...response.data.visited])
   }
-  const handleSubmit = async (e) => {
-    e.preventDefault() //So that form submission doesn't trigger a page refresh
 
-    // send the username and password to the server
-    // try {
-    //   const response = await axios.post('/userlanding', {
-    //     userInfo: {
-    //       deleteAccount: deleteAccount
-    //     },
-    //   })
-    //   //If success then update context for logged in user and redirect them...
-    // }
-    // params: { userId: user.usersid }, //Having trouble sending over user id as separate params
-  }
   if (stateBreweries) {
 
     //Only rendering after mount side effect runs to retrieve state breweries
