@@ -4,11 +4,11 @@ import {
   Routes,
   Navigate,
 } from 'react-router-dom';
-import React, { createContext } from 'react';
+import React, { createContext, useState } from 'react';
 import Login from './Login';
 import CreateUser from './CreateUser';
 import Home from './Home';
-import {UserProvider} from './UserDetails';
+import UserContext from './UserDetails';
 import UserLanding from './UserLanding';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -38,11 +38,14 @@ const App = () => {
   //Set user information here on load through useeffect?
   // const [userInfo, setUserInfo] = useState('');
 
-  // const [user, setUser] = useState(undefined)
-  // UserContext = createContext(undefined)
+  const [user, setUser] = useState(undefined);
+  const value = {
+    user: user,
+    setUser: setUser
+  }
 
   return (
-    <UserProvider>
+    <UserContext.Provider value={value}>
       <Router>
         <div className='App'>
           <div className='navbarHolder'>
@@ -59,7 +62,7 @@ const App = () => {
           <Footer />
         </div>
       </Router>
-    </UserProvider>
+    </UserContext.Provider>
   );
 };
 

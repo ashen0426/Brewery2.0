@@ -1,15 +1,15 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import StateBreweries from './StateBreweries';
 import VisitedBreweries from './VisitedBreweries';
-import { useUser } from './UserDetails';
+import UserContext from './UserDetails';
 import axios from 'axios';
 
 const UserLanding = () => {
   //Batching state changes in React leading to onClick update lags????
   const [stateBreweries, setStateBreweries] = useState();
   const [visBreweries, setVisBreweries] = useState();
-  const user = useUser();
+  const user = useContext(UserContext).user;
 
   useEffect(() => {
     //Obtaining state upon user hitting landing page - user's state breweries and visited breweries
@@ -19,6 +19,7 @@ const UserLanding = () => {
           const response = await axios.get('/api', {
             params: { homestate: user.homestate, username: user.username },
           })
+          console.log('userlanding get response ', response)
           setStateBreweries(response.data.getBreweries)
           setVisBreweries(response.data.visited)
         } catch (error) {
