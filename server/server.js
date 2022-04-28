@@ -39,9 +39,9 @@ app.get('/getUser/:username', userController.getUser, (req, res) => {
   res.status(200).json(res.locals.userInfo);
 })
 
-
 app.post('/createUser', cookieController.storeUserInfo, userController.createUser, brewController.addBreweriesToDatabase, cookieController.session, (req, res) => {
-  res.json(res.locals.getBreweries); // do they need userInfo to be sent back?
+  console.log("finished the signup process, back in server.js, res.locals is storing ", res.locals.getBreweries);
+  res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
 });
 
 
@@ -53,6 +53,7 @@ app.delete('/deleteUser',  userController.deleteUser, (req, res) => {
 
 
 app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, brewController.getBreweries, (req, res) => {
+  console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.getBreweries);
   res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
 });
 

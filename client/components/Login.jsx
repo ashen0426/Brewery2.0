@@ -15,7 +15,7 @@ const Login = (props) => {
     // send the username and password to the server
     try {
       const response = await axios.post('/login', {
-        userInfo: {
+        newUser: {
           username: username,
           password: password,
         },
