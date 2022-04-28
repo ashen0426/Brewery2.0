@@ -61,19 +61,17 @@ app.delete('/deleteUser',
 
 app.post('/login',
   userController.verifyLogin,
-  brewController.getBreweries,
-  cookieController.session,
+  userController.getUser,
+  cookieController.session, 
   (req, res) => {
-  console.log('log in successful, sending back list of breweries'),
-  res.status(200).json(res.locals);
+  console.log('log in successful, sending back userInfo'),
+  res.status(200).json(res.locals.userInfo);
 });
 
 
-
-// app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, brewController.getBreweries, (req, res) => {
-//   // console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.getBreweries);
-//   res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
-//   // >>>>>>> main
+// app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, userController.getUser, (req, res) => {
+//   // console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.userInfo);
+//   res.status(200).json(res.locals.userInfo); // do they need userInfo to be sent back?
 // });
 
 

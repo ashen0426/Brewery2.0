@@ -4,17 +4,37 @@ const db = require('../db.js');
 const brewController = {};
 
 brewController.getBreweries = async (req, res, next) => {
-  console.log(req.body);
-  const userName = req.body.userInfo.username;
-  let queryString = `SELECT homestate FROM users WHERE username = '${userName}'`
-  let state = await db.query(queryString);
-  state = state.rows[0].homestate;
-  console.log(state);
+  // console.log(req.body);
+  // const userName = req.query.username;
+  // let queryString = `SELECT homestate FROM users WHERE username = '${userName}'`
+  // let state = await db.query(queryString);
+  // state = state.rows[0].homestate;
+  // console.log(state);
+  const options = {
+    method: 'GET',
+    url: `https://api.openbrewerydb.org/breweries?by_state=${req.query.homestate}`,
+    headers: {
+      Accept: 'application/json',
+    }
+  };
 
-  queryString = `SELECT * FROM breweries WHERE brewerystate = '${state}'`
-  const breweries = await db.query(queryString);
-  res.locals.getBreweries = breweries.rows;
-  console.log(res.locals.getBreweries);
+  try {
+    await axios(options).then((response) => {
+      const breweries = response.data;
+      res.locals.getBreweries = breweries;
+      console.log('api fetch success');
+    });
+  } catch (err) {
+    next({
+      log: `brewController.getBreweries: ERROR: Error query breweries API by state: ${userState}.`,
+      message: { err: 'Error occurred in brewController.getBreweries.'}
+    });
+  }
+
+  // queryString = `SELECT * FROM breweries WHERE brewerystate = '${req.query.homestate}'`
+  // const breweries = await db.query(queryString);
+  // res.locals.getBreweries = breweries.rows;
+  // console.log(res.locals.getBreweries);
   return next();
 };
 
@@ -87,7 +107,7 @@ brewController.addBreweriesToDatabase = async (req, res, next) => {
 };
 
 brewController.getVisited = async (req, res, next) => {
-  let username = req.query.username;
+  // let username = req.query.username;
   let userId = req.query.userId;
   console.log('req.query in getvisted middleware', req.query);
   // let username;
@@ -97,19 +117,14 @@ brewController.getVisited = async (req, res, next) => {
   //   username = res.locals.username; //coming from addVisited controller
   // }
   // gets userId from a supplied username
-  const userIdSelector = `SELECT id FROM users WHERE username = '${username}'`;
-  const getUserId = await db.query(userIdSelector);
+  // const userIdSelector = `SELECT id FROM users WHERE username = '${username}'`;
+  // const getUserId = await db.query(userIdSelector);
   // queries for the list of breweries based on userId
-  const queryString = `SELECT * FROM breweries b
-                      //INNER JOIN uservisited uv ON b.breweryid = uv.breweryid
-
-                      //INNER JOIN users u ON uv.userid = u.id WHERE u.id = ${getUserId} AND uv.visited = 'true'`;
-
-                      //INNER JOIN users u ON uv.userid = u.id WHERE u.id = $1 AND uv.visited = 'true'`;
+  const queryString = `SELECT * FROM breweries b INNER JOIN uservisited uv ON b.breweryid = uv.breweryid INNER JOIN users u ON uv.userid = u.id WHERE u.id = ${userId} AND uv.visited = 'true'`;
 
   try {
-    const visits = db.query(queryString, [userId]);
-    res.locals.visited = visits.rows;
+    const visits = db.query(queryString);
+    res.locals.visited = [];
     return next();
   } catch (err) {
     next({

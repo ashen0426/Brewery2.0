@@ -28,18 +28,14 @@ const Navbar = (props) => {
         {/*Leaving this as a UL/LI so that we want to add more navbar options */}
         <ul className='nav_links'>
           {user && (
-            <select className='accountOptions-Btn' >
-              <option disabled selected>Account Options</option>
-              <option className='favorite-Btn' onClick={handleFavorites} >
-                Favorites
-              </option>
-              <option className='logout-Btn' onClick={handleLogout} >
+            <li>
+              <Link to='/logout' className='logout-Btn' onClick={handleLogout}>
                 Logout
-              </option>
               <option className='delete-Btn' onClick={handleDelete}>
                 Delete Account
               </option>
-            </select>
+            </Link>
+            </li>
           )}
         </ul>
       </header>

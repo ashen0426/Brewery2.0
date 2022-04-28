@@ -25,6 +25,7 @@ const UserLanding = () => {
       if (user) {
         try {
           const response = await axios.get(`/api?homestate=${user.homestate}&username=${user.username}&userId=${user.id}`)
+          console.log(response.data);
           setStateBreweries(response.data.getBreweries)
           setVisBreweries(response.data.visited)
         } catch (error) {
@@ -78,13 +79,12 @@ const UserLanding = () => {
   }
 
   if (stateBreweries) {
-
     //Only rendering after mount side effect runs to retrieve state breweries
     return (
       <div className="containerStyle">
         <div className='searchBarStyle'>
           <form placeholder='Search by State' onSubmit={handleSearch}></form>
-          <input className='searchButton' type='submit' value='search' >Search</input>
+          {/* <input className='searchButton' type='submit' value='search' >Search</input> */}
         </div>
         <StateBreweries
           stateBreweries={[...stateBreweries]}
@@ -94,6 +94,9 @@ const UserLanding = () => {
           visBreweries={[...visBreweries]}
           removeVisited={removeVisited}
         />
+        <div>
+          {/* <input className='deleteAccount' type='submit' value='true' color='red'>Delete Account</input> */}
+        </div>
       </div>
     )
   }
