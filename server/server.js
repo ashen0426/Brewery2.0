@@ -40,20 +40,20 @@ app.get('/getUser/:username', userController.getUser, (req, res) => {
   res.status(200).json(res.locals.userInfo);
 })
 
-app.post('/createUser', cookieController.storeUserInfo, userController.createUser, brewController.addBreweriesToDatabase, cookieController.session, (req, res) => {
+app.post('/createUser', userController.createUser, brewController.addBreweriesToDatabase, cookieController.session, (req, res) => {
   console.log("finished the signup process, back in server.js, res.locals is storing ", res.locals.getBreweries);
   res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
 });
 
 
 
-app.delete('/deleteUser',  userController.deleteUser, (req, res) => {
+app.delete('/deleteUser', userController.deleteUser, (req, res) => {
   res.status(200).json('You have succesfully deleted the user.');
 })
 
 
 
-app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, brewController.getBreweries, (req, res) => {
+app.post('/login', userController.verifyLogin, userController.getUser, (req, res) => {
   console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.getBreweries);
   res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
 });
@@ -83,3 +83,5 @@ app.use((err, req, res, next) => {
 module.exports = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+// cookieController.storeUserInfo,

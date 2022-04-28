@@ -76,14 +76,14 @@ const UserLanding = () => {
     e.preventDefault() //So that form submission doesn't trigger a page refresh
 
     // send the username and password to the server
-    try {
-      const response = await axios.post('/userlanding', {
-        userInfo: {
-          deleteAccount: deleteAccount
-        },
-      })
-      //If success then update context for logged in user and redirect them...
-    }
+    // try {
+    //   const response = await axios.post('/userlanding', {
+    //     userInfo: {
+    //       deleteAccount: deleteAccount
+    //     },
+    //   })
+    //   //If success then update context for logged in user and redirect them...
+    // }
     // params: { userId: user.usersid }, //Having trouble sending over user id as separate params
   }
   if (stateBreweries) {

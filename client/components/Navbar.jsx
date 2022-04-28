@@ -4,14 +4,19 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const Navbar = (props) => {
   const user = useContext(UserContext).user;
-
+  const setUser = useContext(UserContext).setUser;
   let navigate = useNavigate();
 
-  const handleLogout = (e) => {
+  const handleLogout = () => {
     ``;
-    console.log('handleLogout');
-    document.cookie = 'BrewCookie=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    user = setUser(undefined);
+    navigate('/');
   };
+  const handleDelete = () => {
+    ``;
+    navigate('/deleteUser');
+  };
+
   return (
     <>
       <header>
@@ -19,11 +24,15 @@ const Navbar = (props) => {
         {/*Leaving this as a UL/LI so that we want to add more navbar options */}
         <ul className='nav_links'>
           {user && (
-            <li>
-              <Link className='logout-Btn' to='/login' onClick={handleLogout}>
+            <select className='accountOptions-Btn' >
+              <option disabled selected>Account Options</option>
+              <option className='logout-Btn' onClick={handleLogout} >
                 Logout
-              </Link>
-            </li>
+              </option>
+              <option className='delete-Btn' onClick={handleDelete}>
+                Delete Account
+              </option>
+            </select>
           )}
         </ul>
       </header>

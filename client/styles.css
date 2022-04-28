@@ -7,6 +7,7 @@ body {
   background: url('https://images.unsplash.com/photo-1612528443702-f6741f70a049?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80');
   background-size: cover;
   background-repeat: no-repeat;
+  background-position-y: 25%;
 
   font-family: 'Poppins', sans-serif;
 
@@ -50,6 +51,7 @@ body {
   height: 100px;
   width: 100%;
 }
+
 .banner {
   font-size: 2.5em;
   margin: 0;
@@ -175,6 +177,7 @@ button {
 .brand {
   font-size: 24px;
 }
+
 .nav_links {
   font-size: 20px;
   list-style: none;
@@ -204,6 +207,21 @@ header {
   width: 100%;
 }
 
+.accountOptions-Btn {
+  /* border-style: solid;
+  border-color: red; */
+  border-width: 2px;
+  padding: 0.5em 1em;
+  background-color: rgba(249, 228, 26, 1);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  text-decoration: none;
+  margin-right: 1em;
+  color: #313030;
+}
+
 .logout-Btn {
   /* border-style: solid;
   border-color: red; */
@@ -219,7 +237,32 @@ header {
   color: #313030;
 }
 
+.delete-Btn {
+  /* border-style: solid;
+  border-color: red; */
+  border-width: 2px;
+  padding: 0.5em 1em;
+  background-color: rgba(249, 228, 26, 1);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  text-decoration: none;
+  margin-right: 1em;
+  color: #313030;
+}
+
+.accountOptions-Btn:hover {
+  background-color: rgba(249, 228, 26, 0.8);
+  text-decoration: none;
+}
+
 .logout-Btn:hover {
+  background-color: rgba(249, 228, 26, 0.8);
+  text-decoration: none;
+}
+
+.delete-Btn:hover {
   background-color: rgba(249, 228, 26, 0.8);
   text-decoration: none;
 }

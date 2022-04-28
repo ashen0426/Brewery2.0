@@ -5,15 +5,15 @@ const db = require('./db.js');
 const userController = {};
 
 userController.createUser = async (req, res, next) => {
-  const firstname = req.body.newUser.firstname;
-  res.locals.firstname = req.body.newUser.firstname;
-  const lastname = req.body.newUser.lastname;
-  res.locals.lastname = req.body.newUser.lastname;
-  const homestate = req.body.newUser.homestate;
-  res.locals.homestate = req.body.newUser.homestate;
-  const username = req.body.newUser.username;
-  res.locals.username = req.body.newUser.username;
-  const password = req.body.newUser.password;
+  const firstname = req.body.userInfo.firstname;
+  res.locals.firstname = req.body.userInfo.firstname;
+  const lastname = req.body.userInfo.lastname;
+  res.locals.lastname = req.body.userInfo.lastname;
+  const homestate = req.body.userInfo.homestate;
+  res.locals.homestate = req.body.userInfo.homestate;
+  const username = req.body.userInfo.username;
+  res.locals.username = req.body.userInfo.username;
+  const password = req.body.userInfo.password;
   if (!username || !password) {
     return next('Missing username or password in createUser');
   } else {
@@ -21,15 +21,15 @@ userController.createUser = async (req, res, next) => {
     const queryString = `INSERT INTO users (firstname, lastname, homestate, username, password) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
     const value = [firstname, lastname, homestate, username, hashedPassword];
     try {
-      const newUser = await db.query(queryString, value);
-      res.locals.userInfo = newUser;
+      const userInfo = await db.query(queryString, value);
+      res.locals.userInfo = userInfo;
       return next();
     } catch (err) {
       next({
         log: `userController.createUser: ERROR: Error during creation of a new user.`,
-        message: { err: 'Error occurred in userController.createUser.'}
+        message: { err: 'Error occurred in userController.createUser.' }
       });
-  }
+    }
   }
 };
 
@@ -39,26 +39,26 @@ userController.verifyLogin = async (req, res, next) => {
   if (!username || !password) {
     return res.status(400).send('Missing username or password in userController.verifyLogin.');
   } else {
-      const queryString = `SELECT password FROM users WHERE username = $1`;
-      const value = [username];
-      try {
-        const dbResults = await db.query(queryString, value);
-        const dbPassword = dbResults.rows[0].password;
-        if (!dbPassword) {
-          return res.send('Username does not exist');
-        }
-        if (bcrypt.compare(password, dbPassword)) {
-          console.log('Passwords match!!!');
-          return next();
-        } else {
-          return res.status(401).send('Incorrect password');
-        } 
-      } catch (err) {
-        next({
-          log: `userController.verifyLogin: ERROR: ${err}`,
-          message: { err: 'Error occurred in userController.verifyLogin.'}
-        });
+    const queryString = `SELECT password FROM users WHERE username = $1`;
+    const value = [username];
+    try {
+      const dbResults = await db.query(queryString, value);
+      const dbPassword = dbResults.rows[0].password;
+      if (!dbPassword) {
+        return res.send('Username does not exist');
       }
+      if (bcrypt.compare(password, dbPassword)) {
+        console.log('Passwords match!!!');
+        return next();
+      } else {
+        return res.status(401).send('Incorrect password');
+      }
+    } catch (err) {
+      next({
+        log: `userController.verifyLogin: ERROR: ${err}`,
+        message: { err: 'Error occurred in userController.verifyLogin.' }
+      });
+    }
   }
 };
 
@@ -78,21 +78,23 @@ userController.verifyLogin = async (req, res, next) => {
 
 userController.checkUser = (req, res, next) => {
   try {
-    if(!req.cookies) { 
+    if (!req.cookies) {
       return next();
-    } else { 
+    } else {
       res.redirect('/userlanding');
     };
   } catch (err) {
     next({
       log: `userController.checkUser: ERROR: Error checking for a cookie in the request object.`,
-      message: { err: 'Error occurred in userController.checkUser.'}
+      message: { err: 'Error occurred in userController.checkUser.' }
     });
   }
 }
 
 userController.getUser = async (req, res, next) => {
-  const { username } = req.params;
+  let username;
+  if (req.params.username) username = req.params.username;
+  else username = req.body.userInfo.username;
   const returnOneUser = `SELECT * FROM users WHERE username = $1`;
   const value = [username];
   try {
@@ -102,7 +104,7 @@ userController.getUser = async (req, res, next) => {
   } catch (err) {
     next({
       log: `userController.getUser: ERROR: ${err}`,
-      message: { err: 'Error occurred in userController.getUser.'}
+      message: { err: 'Error occurred in userController.getUser.' }
     });
   }
 }
@@ -117,7 +119,7 @@ userController.deleteUser = async (req, res, next) => {
   } catch (err) {
     next({
       log: `userController.deleteUser: ERROR: Error deleting a row from users table.`,
-      message: { err: 'Error occurred in userController.deleteUser.'}
+      message: { err: 'Error occurred in userController.deleteUser.' }
     });
   }
 }
