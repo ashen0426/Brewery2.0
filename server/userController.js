@@ -21,8 +21,9 @@ userController.createUser = async (req, res, next) => {
         message: { err: 'Error occurred in userController.createUser.'}
       });
   }
-  }
+}
 };
+
 
 userController.verifyLogin = async (req, res, next) => {
   const { username, password } = req.body.userInfo;
@@ -52,19 +53,19 @@ userController.verifyLogin = async (req, res, next) => {
   }
 };
 
-userController.setCookie = (req, res, next) => {
-  // set cookie with a name, value (in this case the username)
-  // httpOnly prevents the client from editing cookie in the browser
-  try {
-    res.cookie('BrewCookie', req.body.userInfo.username, { httpOnly: true });
-    return next();
-  } catch (err) {
-    next({
-      log: `userController.setCookie: ERROR: Error adding a cookie to the response object.`,
-      message: { err: 'Error occurred in userController.setCookie.'}
-    });
-  }
-};
+// userController.setCookie = (req, res, next) => {
+//   // set cookie with a name, value (in this case the username)
+//   // httpOnly prevents the client from editing cookie in the browser
+//   try {
+//     res.cookie('BrewCookie', req.body.userInfo.username, { httpOnly: true });
+//     return next();
+//   } catch (err) {
+//     next({
+//       log: `userController.setCookie: ERROR: Error adding a cookie to the response object.`,
+//       message: { err: 'Error occurred in userController.setCookie.'}
+//     });
+//   }
+// };
 
 userController.checkUser = (req, res, next) => {
   try {
@@ -110,20 +111,5 @@ userController.deleteUser = async (req, res, next) => {
     });
   }
 }
-
-userController.deleteUser = async (req, res, next) => {
-    const { userId } = req.body;
-    const text = `DELETE FROM users WHERE userid = $1 RETURNING *`;
-    const values = [userId];
-    try {
-      db.query(text, values);
-      return next();
-    } catch (err) {
-      next({
-        log: `userController.deleteUser: ERROR: Error deleting a row from users table.`,
-        message: { err: 'Error occurred in userController.deleteUser.'}
-      });
-    }
-  }
 
 module.exports = userController;

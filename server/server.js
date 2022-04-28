@@ -7,9 +7,9 @@ const apiBrewRouter = require("./routes/apiBrewRouter");
 const visitRouter = require("./routes/visitRouter");
 const db = require("./db.js");
 
-
 const userController = require('./userController');
-
+const cookieController = require('./controllers/cookieController')
+const brewController = require('./controllers/brewController')
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -29,7 +29,9 @@ app.get('/', (req, res) => {
 
 
 
-app.get('/login', userController.checkUser, (req, res) => {
+app.get('/login', 
+  userController.checkUser, 
+  (req, res) => {
   res.status(200);
 });
 
@@ -39,26 +41,32 @@ app.get('/getUser/:username', userController.getUser, (req, res) => {
 })
 
 
-app.post('/createUser', userController.createUser,  (req, res) => {
-  res.json(res.locals.users);
+app.post('/createUser', 
+  cookieController.storeUserInfo, //can store anything else that needed in frontend
+  userController.createUser, 
+  brewController.addBreweriesToDatabase, 
+  cookieController.session,
+  (req, res) => {
+  res.status(200).json(res.locals.getBreweries); // sending back the brewery list 
 });
 
 
 
-app.delete('/deleteUser',  userController.deleteUser, (req, res) => {
+app.delete('/deleteUser', 
+userController.deleteUser, 
+(req, res) => {
   res.status(200).json('You have succesfully deleted the user.');
 })
 
 
-
-app.post('/login', userController.verifyLogin, userController.setCookie, userController.getUser, (req, res) => {
-  res.status(200).json(res.locals.userInfo);
+app.post('/login', 
+  //cookieController.storeUserInfo,
+  userController.verifyLogin, 
+  brewController.getBreweries,
+  (req, res) => {
+  res.status(200).json(res.locals.getBreweries);
 });
 
-app.get('/', (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, '../client/template.html'));
-
-});
 
 // ERROR HANDLER
 //invoked if you pass an argument to next()
