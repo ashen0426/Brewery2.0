@@ -9,12 +9,12 @@ brewController.getBreweries = async (req, res, next) => {
   const response = await db.query(queryString);
   //console.log(response);
   state = response.rows[0].homestate;
-  console.log(state);
+  // console.log(state);
   //const state = response[0];
 
   const queryString2 = `SELECT * FROM breweries WHERE brewerystate = '${state}'`
   const breweries = await db.query(queryString2);
-  console.log(breweries.fields);
+  // console.log(breweries.fields);
   res.locals.getBreweries = breweries;
   return next();
 };
@@ -74,7 +74,9 @@ brewController.addBreweriesToDatabase = async (req, res, next) => {
 };
 
 brewController.getVisited = async (req, res, next) => {
-  let username = res.locals.username;
+  let username = req.query.username;
+  let userId = req.query.userId;
+  console.log('req.query in getvisted middleware', req.query);
   // let username;
   // if (req.query.username) {
   //   username = req.query.username;
@@ -82,15 +84,15 @@ brewController.getVisited = async (req, res, next) => {
   //   username = res.locals.username; //coming from addVisited controller
   // }
   // gets userId from a supplied username
-  const userIdSelector = `SELECT id FROM users WHERE username = '${username}'`;
-  const getUserId = await db.query(userIdSelector);
+  // const userIdSelector = `SELECT id FROM users WHERE username = '${username}'`;
+  // const getUserId = await db.query(userIdSelector);
 
   // queries for the list of breweries based on userId
   const queryString = `SELECT * FROM breweries b 
                       INNER JOIN uservisited uv ON b.breweryid = uv.breweryid
-                      INNER JOIN users u ON uv.userid = u.id WHERE u.id = ${getUserId}`;
+                      INNER JOIN users u ON uv.userid = u.id WHERE u.id = $1`;
   try {
-    const visits = db.query(queryString, [username]);
+    const visits = db.query(queryString, [userId]);
     res.locals.visited = visits.rows;
     return next();
   } catch (err) {
