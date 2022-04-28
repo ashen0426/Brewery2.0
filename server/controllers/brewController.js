@@ -223,7 +223,7 @@ brewController.addVisited = async (req, res, next) => {
       await db.query(text, values);
     }
     return next();
-    
+
   } catch (err) {
     next({
       log: `brewController.addVisited: ERROR: ${err.message}, error inserting into visited table.`,

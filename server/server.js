@@ -65,8 +65,14 @@ app.post('/login',
   cookieController.session, 
   (req, res) => {
   console.log('log in successful, sending back list of breweries'),
-  res.status(200).json(res.locals.getBreweries);
-});
+  res.status(200).json(res.locals.getBreweries)});
+
+
+// app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, brewController.getBreweries, (req, res) => {
+//   // console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.getBreweries);
+//   res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
+// >>>>>>> main
+// });
 
 
 // ERROR HANDLER
