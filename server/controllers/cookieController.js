@@ -8,7 +8,7 @@ SESSION_TIME = 3000;
 cookieController.storeUserInfo = (req, res, next) => {
     // console.log('logging new user data', req.body.userInfo);
     res.locals.username = req.body.userInfo.username;
-    // res.locals.password = req.body.userInfo.password;
+    res.locals.password = req.body.userInfo.password;
     // res.locals.username = req.body.userInfo.username;
     // res.locals.password = req.body.userInfo.password;
     // set cookie to expire after 1 week

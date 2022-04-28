@@ -85,9 +85,7 @@ userController.checkUser = (req, res, next) => {
 }
 
 userController.getUser = async (req, res, next) => {
-  let username;
-  if(req.params.username) username = req.params.username;
-  else username = req.body.userInfo.username;
+  const { username } = req.params;
   const returnOneUser = `SELECT * FROM users WHERE username = $1`;
   const value = [username];
   try {

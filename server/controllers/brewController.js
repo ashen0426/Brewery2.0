@@ -101,8 +101,12 @@ brewController.getVisited = async (req, res, next) => {
   const getUserId = await db.query(userIdSelector);
   // queries for the list of breweries based on userId
   const queryString = `SELECT * FROM breweries b
-                      INNER JOIN uservisited uv ON b.breweryid = uv.breweryid
-                      INNER JOIN users u ON uv.userid = u.id WHERE u.id = ${getUserId} AND uv.visited = 'true'`;
+                      //INNER JOIN uservisited uv ON b.breweryid = uv.breweryid
+
+                      //INNER JOIN users u ON uv.userid = u.id WHERE u.id = ${getUserId} AND uv.visited = 'true'`;
+
+                      //INNER JOIN users u ON uv.userid = u.id WHERE u.id = $1 AND uv.visited = 'true'`;
+
   try {
     const visits = db.query(queryString, [userId]);
     res.locals.visited = visits.rows;
