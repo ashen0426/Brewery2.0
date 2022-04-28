@@ -35,8 +35,8 @@ userController.createUser = async (req, res, next) => {
 };
 
 userController.verifyLogin = async (req, res, next) => {
-  const username = res.locals.username;
-  const password = res.locals.password;
+  const username = req.body.userInfo.username;
+  const password = req.body.userInfo.password;
   if (!username || !password) {
     return res.status(400).send('Missing username or password in userController.verifyLogin.');
   } else {

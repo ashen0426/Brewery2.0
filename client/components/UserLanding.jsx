@@ -11,7 +11,7 @@ const UserLanding = () => {
   const [stateBreweries, setStateBreweries] = useState();
   const [visBreweries, setVisBreweries] = useState();
   const user = useContext(UserContext).user;
-
+  
   useEffect(() => {
     //Obtaining state upon user hitting landing page - user's state breweries and visited breweries
     const getBreweries = async () => {
@@ -71,7 +71,6 @@ const UserLanding = () => {
   }
 
   if (stateBreweries) {
-
     //Only rendering after mount side effect runs to retrieve state breweries
     return (
       <div className="containerStyle">
