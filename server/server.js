@@ -65,7 +65,7 @@ app.post('/login',
   cookieController.session, 
   (req, res) => {
   console.log('log in successful, sending back list of breweries'),
-  res.status(200).json(res.locals.getBreweries);
+  res.status(200).json(res.locals);
 });
 
 

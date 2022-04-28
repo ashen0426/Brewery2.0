@@ -56,6 +56,18 @@ userController.verifyLogin = async (req, res, next) => {
         }
         if (bcrypt.compare(password, dbPassword)) {
           console.log('Passwords match!!!');
+          const returnOneUser = `SELECT * FROM users WHERE username = $1`;
+          const value = [username];
+          try {
+            const response = await db.query(returnOneUser, value);
+            res.locals.userInfo = response.rows[0];
+            return next();
+          } catch (err) {
+            next({
+              log: `userController.getUser: ERROR: ${err}`,
+              message: { err: 'Error occurred in userController.getUser.'}
+            });
+          }
           return next();
         } else {
           return res.status(401).send('Incorrect password');
