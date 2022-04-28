@@ -6,7 +6,7 @@ const userController = {};
 
 userController.createUser = async (req, res, next) => {
   console.log(req.body.userInfo);
-  const {username, password, homestate, firstname, lastname } = req.body.userInfo;
+  const { username, password, homestate, firstname, lastname } = req.body.userInfo;
   // const firstname = req.body.newUser.firstname;
   // res.locals.firstname = req.body.newUser.firstname;
   // const lastname = req.body.newUser.lastname;
@@ -30,10 +30,10 @@ userController.createUser = async (req, res, next) => {
     } catch (err) {
       next({
         log: `userController.createUser: ERROR: ${err}`,
-        message: { err: 'Error occurred in userController.createUser.'}
+        message: { err: 'Error occurred in userController.createUser.' }
       });
+    }
   }
-}
 };
 
 
@@ -83,15 +83,15 @@ userController.verifyLogin = async (req, res, next) => {
 
 userController.checkUser = (req, res, next) => {
   try {
-    if(!req.cookies) { 
+    if (!req.cookies) {
       return next();
-    } else { 
+    } else {
       res.redirect('/userlanding');
     };
   } catch (err) {
     next({
       log: `userController.checkUser: ERROR: ${err}`,
-      message: { err: 'Error occurred in userController.checkUser.'}
+      message: { err: 'Error occurred in userController.checkUser.' }
     });
   }
 }
@@ -107,7 +107,7 @@ userController.getUser = async (req, res, next) => {
   } catch (err) {
     next({
       log: `userController.getUser: ERROR: ${err}`,
-      message: { err: 'Error occurred in userController.getUser.'}
+      message: { err: 'Error occurred in userController.getUser.' }
     });
   }
 }
@@ -122,7 +122,7 @@ userController.deleteUser = async (req, res, next) => {
   } catch (err) {
     next({
       log: `userController.deleteUser: ERROR: ${err}`,
-      message: { err: 'Error occurred in userController.deleteUser.'}
+      message: { err: 'Error occurred in userController.deleteUser.' }
     });
   }
 }

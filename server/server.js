@@ -28,11 +28,11 @@ app.get('/', (req, res) => {
 
 
 
-app.get('/login', 
-  userController.checkUser, 
+app.get('/login',
+  userController.checkUser,
   (req, res) => {
-  res.status(200);
-});
+    res.status(200);
+  });
 
 
 app.get('/getUser/:username', userController.getUser, (req, res) => {
@@ -40,40 +40,41 @@ app.get('/getUser/:username', userController.getUser, (req, res) => {
 })
 
 
-app.post('/createUser', 
+app.post('/createUser',
   //cookieController.storeUserInfo, //can store anything else that needed in frontend
-  userController.createUser, 
-  brewController.addBreweriesToDatabase, 
+  userController.createUser,
+  brewController.addBreweriesToDatabase,
   cookieController.session,
   (req, res) => {
-  console.log('create user successful, sending back list of breweries'),
-  res.status(200).json(res.locals.getBreweries); // sending back the brewery list 
-});
+    console.log('create user successful, sending back list of breweries'),
+      res.status(200).json(res.locals.getBreweries); // sending back the brewery list 
+  });
 
 
 
-app.delete('/deleteUser', 
-userController.deleteUser, 
-(req, res) => {
-  res.status(200).json('You have succesfully deleted the user.');
-})
+app.delete('/deleteUser',
+  userController.deleteUser,
+  (req, res) => {
+    res.status(200).json('You have succesfully deleted the user.');
+  })
 
 
-app.post('/login', 
+app.post('/login',
   userController.verifyLogin,
   brewController.getBreweries,
-  cookieController.session, 
+  cookieController.session,
   (req, res) => {
   console.log('log in successful, sending back list of breweries'),
   res.status(200).json(res.locals);
 });
 
 
-app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, brewController.getBreweries, (req, res) => {
-  // console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.getBreweries);
-  res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
-// >>>>>>> main
-});
+
+// app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, brewController.getBreweries, (req, res) => {
+//   // console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.getBreweries);
+//   res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
+//   // >>>>>>> main
+// });
 
 
 // ERROR HANDLER
@@ -94,3 +95,5 @@ app.use((err, req, res, next) => {
 module.exports = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+// cookieController.storeUserInfo,
