@@ -4,37 +4,50 @@ const db = require('../db.js');
 const brewController = {};
 
 brewController.getBreweries = async (req, res, next) => {
-  const username = res.locals.username;
-  const queryString = `SELECT homestate FROM users WHERE username = '${username}'`
-  const response = await db.query(queryString);
-  console.log(response.rows);
-  state = response.rows[0].homestate;
-  // console.log(state);
-  //const state = response[0];
+  console.log(req.body);
+  const userName = req.body.userInfo.username;
+  let queryString = `SELECT homestate FROM users WHERE username = '${userName}'`
+  let state = await db.query(queryString);
+  state = state.rows[0].homestate;
+  console.log(state);
 
-  const queryString2 = `SELECT * FROM breweries WHERE brewerystate = '${state}'`
-  const breweries = await db.query(queryString2);
-  // console.log(breweries.fields);
-  res.locals.getBreweries = breweries;
+  queryString = `SELECT * FROM breweries WHERE brewerystate = '${state}'`
+  const breweries = await db.query(queryString);
+  res.locals.getBreweries = breweries.rows;
+  console.log(res.locals.getBreweries);
   return next();
 };
 
 brewController.addBreweriesToDatabase = async (req, res, next) => {
-  const userState = res.locals.homestate;
-  console.log('in addBreweryToDatabase middleware and the userstate is ', userState);
-  const queryString = `SELECT EXISTS (SELECT FROM breweries WHERE brewerystate = '${userState}')`;
+  let userState = req.body.userInfo.homestate;
+
+  let arr = userState.split('_')
+  //console.log("!!!!!!!here!!!!!!!!", userState);
+  if(arr.length>1) userStateForDatabase = arr.join(' ')
+  else userStateForDatabase = userState;
+
+  console.log('user state:', userState);
+  console.log('user state for database:', userStateForDatabase);
+
+  console.log('in addBreweryToDatabase middleware and the userstate is ', userStateForDatabase);
+  let queryString = `SELECT EXISTS (SELECT FROM breweries WHERE brewerystate = '${userStateForDatabase}')`;
   //return next();
 
   const exist = await db.query(queryString);
   //variable.rows[0].exists
   
-  console.log('logging true or false:', exist.rows[0].exists);
+  //console.log('logging true or false:', exist.rows[0].exists);
+  const value = exist.rows[0].exists
+  //console.log('value is: ', value);
 
-  if(exist === 'true'){
+  //console.log('comparing: ', value === true);
+
+  if(value === true){
     console.log('the state exists');
-    queryString = `SELECT * FROM breweries WHERE breweryState = '${userState}'`;
-    const breweries = await db.query(queryString);
-    res.locals.getBreweries = breweries;
+    queryString = `SELECT * FROM breweries WHERE breweryState = '${userStateForDatabase}'`;
+    let breweries = await db.query(queryString);
+    res.locals.getBreweries = breweries.rows;
+    //console.log('logging breweries: ', breweries.rows);
   }
   else{
     console.log('the state does not exist, need fetch from api');
@@ -84,13 +97,16 @@ brewController.getVisited = async (req, res, next) => {
   //   username = res.locals.username; //coming from addVisited controller
   // }
   // gets userId from a supplied username
-  // const userIdSelector = `SELECT id FROM users WHERE username = '${username}'`;
-  // const getUserId = await db.query(userIdSelector);
-
+  const userIdSelector = `SELECT id FROM users WHERE username = '${username}'`;
+  const getUserId = await db.query(userIdSelector);
   // queries for the list of breweries based on userId
-  const queryString = `SELECT * FROM breweries b 
-                      INNER JOIN uservisited uv ON b.breweryid = uv.breweryid
-                      INNER JOIN users u ON uv.userid = u.id WHERE u.id = $1 AND uv.visited = 'true'`;
+  const queryString = `SELECT * FROM breweries b
+                      //INNER JOIN uservisited uv ON b.breweryid = uv.breweryid
+
+                      //INNER JOIN users u ON uv.userid = u.id WHERE u.id = ${getUserId} AND uv.visited = 'true'`;
+
+                      //INNER JOIN users u ON uv.userid = u.id WHERE u.id = $1 AND uv.visited = 'true'`;
+
   try {
     const visits = db.query(queryString, [userId]);
     res.locals.visited = visits.rows;

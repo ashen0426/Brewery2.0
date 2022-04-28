@@ -11,6 +11,12 @@ const UserLanding = () => {
   const [stateBreweries, setStateBreweries] = useState();
   const [visBreweries, setVisBreweries] = useState();
   const user = useContext(UserContext).user;
+  const navigate = useNavigate();
+  const handleSearch = () => {
+    ``;
+    navigate('/search');
+  };
+
 
   useEffect(() => {
     //Obtaining state upon user hitting landing page - user's state breweries and visited breweries
@@ -75,6 +81,10 @@ const UserLanding = () => {
     //Only rendering after mount side effect runs to retrieve state breweries
     return (
       <div className="containerStyle">
+        <div className='searchBarStyle'>
+          <form placeholder='Search by State' onSubmit={handleSearch}></form>
+          <input className='searchButton' type='submit' value='search' >Search</input>
+        </div>
         <StateBreweries
           stateBreweries={[...stateBreweries]}
           addStateToVisited={addStateToVisited}
@@ -83,9 +93,6 @@ const UserLanding = () => {
           visBreweries={[...visBreweries]}
           removeVisited={removeVisited}
         />
-        <div>
-          <input className='deleteAccount' type='submit' value='true' color='red'>Delete Account</input>
-        </div>
       </div>
     )
   }
