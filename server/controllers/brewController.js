@@ -8,7 +8,7 @@ brewController.getBreweries = async (req, res, next) => {
   const queryString = `SELECT homestate FROM users WHERE username = '${username}'`
   const response = await db.query(queryString);
   console.log(response.rows);
-  // state = response.rows[0].homestate;
+  state = response.rows[0].homestate;
   // console.log(state);
   //const state = response[0];
 
@@ -90,7 +90,7 @@ brewController.getVisited = async (req, res, next) => {
   // queries for the list of breweries based on userId
   const queryString = `SELECT * FROM breweries b 
                       INNER JOIN uservisited uv ON b.breweryid = uv.breweryid
-                      INNER JOIN users u ON uv.userid = u.id WHERE u.id = $1`;
+                      INNER JOIN users u ON uv.userid = u.id WHERE u.id = $1 AND uv.visited = 'true'`;
   try {
     const visits = db.query(queryString, [userId]);
     res.locals.visited = visits.rows;
