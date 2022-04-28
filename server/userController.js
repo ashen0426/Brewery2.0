@@ -5,16 +5,17 @@ const db = require('./db.js');
 const userController = {};
 
 userController.createUser = async (req, res, next) => {
-  const firstname = req.body.userInfo.firstname;
-  res.locals.firstname = req.body.userInfo.firstname;
-  const lastname = req.body.userInfo.lastname;
-  res.locals.lastname = req.body.userInfo.lastname;
-  const homestate = req.body.userInfo.homestate;
-  res.locals.homestate = req.body.userInfo.homestate;
-  const username = req.body.userInfo.username;
-  res.locals.username = req.body.userInfo.username;
-  const password = req.body.userInfo.password;
-
+  console.log(req.body.userInfo);
+  const {username, password, homestate, firstname, lastname } = req.body.userInfo;
+  // const firstname = req.body.newUser.firstname;
+  // res.locals.firstname = req.body.newUser.firstname;
+  // const lastname = req.body.newUser.lastname;
+  // res.locals.lastname = req.body.newUser.lastname;
+  // const homestate = req.body.newUser.homestate;
+  // res.locals.homestate = req.body.newUser.homestate;
+  // const username = req.body.newUser.username;
+  // res.locals.username = req.body.newUser.username;
+  // const password = req.body.newUser.password;
   if (!username || !password) {
     return next('Missing username or password in createUser');
   } else {
@@ -24,6 +25,7 @@ userController.createUser = async (req, res, next) => {
     try {
       const newUser = await db.query(queryString, value);
       res.locals.userInfo = newUser;
+      console.log('in create user middleware', newUser);
       return next();
     } catch (err) {
       next({
@@ -31,10 +33,14 @@ userController.createUser = async (req, res, next) => {
         message: { err: 'Error occurred in userController.createUser.'}
       });
   }
-  }
+}
 };
 
+
 userController.verifyLogin = async (req, res, next) => {
+  console.log('in verify login middleware');
+  // const username = res.locals.username;
+  // const password = res.locals.password;
   const username = req.body.userInfo.username;
   const password = req.body.userInfo.password;
   if (!username || !password) {
@@ -63,20 +69,6 @@ userController.verifyLogin = async (req, res, next) => {
   }
 };
 
-// userController.setCookie = async (req, res, next) => {
-//   // set cookie with a name, value (in this case the username)
-//   // httpOnly prevents the client from editing cookie in the browser
-//   try {
-//     await res.cookie('BrewCookie', req.body.userInfo.username, { httpOnly: true });
-//     return next();
-//   } catch (err) {
-//     next({
-//       log: `userController.setCookie: ERROR: Error adding a cookie to the response object.`,
-//       message: { err: 'Error occurred in userController.setCookie.'}
-//     });
-//   }
-// };
-
 userController.checkUser = (req, res, next) => {
   try {
     if(!req.cookies) { 
@@ -93,9 +85,7 @@ userController.checkUser = (req, res, next) => {
 }
 
 userController.getUser = async (req, res, next) => {
-  let username;
-  if(req.params.username) username = req.params.username;
-  else username = req.body.userInfo.username;
+  const { username } = req.params;
   const returnOneUser = `SELECT * FROM users WHERE username = $1`;
   const value = [username];
   try {
@@ -124,6 +114,5 @@ userController.deleteUser = async (req, res, next) => {
     });
   }
 }
-
 
 module.exports = userController;
