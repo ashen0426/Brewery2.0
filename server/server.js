@@ -52,7 +52,7 @@ app.delete('/deleteUser',  userController.deleteUser, (req, res) => {
 
 app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, brewController.getBreweries, (req, res) => {
   // console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.getBreweries);
-  res.status(200).json(res.locals.userInfo); // do they need userInfo to be sent back?
+  res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
 });
 
 
