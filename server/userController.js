@@ -46,26 +46,38 @@ userController.verifyLogin = async (req, res, next) => {
   if (!username || !password) {
     return res.status(400).send('Missing username or password in userController.verifyLogin.');
   } else {
-    const queryString = `SELECT password FROM users WHERE username = $1`;
-    const value = [username];
-    try {
-      const dbResults = await db.query(queryString, value);
-      const dbPassword = dbResults.rows[0].password;
-      if (!dbPassword) {
-        return res.send('Username does not exist');
+      const queryString = `SELECT password FROM users WHERE username = $1`;
+      const value = [username];
+      try {
+        const dbResults = await db.query(queryString, value);
+        const dbPassword = dbResults.rows[0].password;
+        if (!dbPassword) {
+          return res.send('Username does not exist');
+        }
+        if (bcrypt.compare(password, dbPassword)) {
+          console.log('Passwords match!!!');
+          const returnOneUser = `SELECT * FROM users WHERE username = $1`;
+          const value = [username];
+          try {
+            const response = await db.query(returnOneUser, value);
+            res.locals.userInfo = response.rows[0];
+            return next();
+          } catch (err) {
+            next({
+              log: `userController.getUser: ERROR: ${err}`,
+              message: { err: 'Error occurred in userController.getUser.'}
+            });
+          }
+          return next();
+        } else {
+          return res.status(401).send('Incorrect password');
+        } 
+      } catch (err) {
+        next({
+          log: `userController.verifyLogin: ERROR: ${err}`,
+          message: { err: 'Error occurred in userController.verifyLogin.'}
+        });
       }
-      if (bcrypt.compare(password, dbPassword)) {
-        console.log('Passwords match!!!');
-        return next();
-      } else {
-        return res.status(401).send('Incorrect password');
-      }
-    } catch (err) {
-      next({
-        log: `userController.verifyLogin: ERROR: ${err}`,
-        message: { err: 'Error occurred in userController.verifyLogin.' }
-      });
-    }
   }
 };
 
