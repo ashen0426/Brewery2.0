@@ -8,7 +8,7 @@ brewController.getBreweries = async (req, res, next) => {
   const queryString = `SELECT homestate FROM users WHERE username = '${username}'`
   const response = await db.query(queryString);
   console.log(response.rows);
-  // state = response.rows[0].homestate;
+  state = response.rows[0].homestate;
   // console.log(state);
   //const state = response[0];
 
