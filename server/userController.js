@@ -14,6 +14,7 @@ userController.createUser = async (req, res, next) => {
   const username = req.body.userInfo.username;
   res.locals.username = req.body.userInfo.username;
   const password = req.body.userInfo.password;
+
   if (!username || !password) {
     return next('Missing username or password in createUser');
   } else {

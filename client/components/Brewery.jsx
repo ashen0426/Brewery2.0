@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import UserContext from './UserDetails'
+import UserDetails from './UserDetails'
 
 const Brewery = (props) => {
   const user = this.context;

@@ -24,7 +24,6 @@ app.use("/visited", visitRouter);
 
 app.use("/client", express.static(path.resolve(__dirname, "../client")));
 
-
 app.get('/', (req, res) => {
   res.status(200).sendFile(path.join(__dirname, '../client/template.html'));
 });
@@ -45,25 +44,15 @@ app.post('/createUser', cookieController.storeUserInfo, userController.createUse
   res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
 });
 
-
-
 app.delete('/deleteUser',  userController.deleteUser, (req, res) => {
   res.status(200).json('You have succesfully deleted the user.');
 })
-
-
 
 app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, brewController.getBreweries, (req, res) => {
   console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.getBreweries);
   res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
 });
 
-
-
-app.get('/', (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, '../client/template.html'));
-
-});
 
 // ERROR HANDLER
 //invoked if you pass an argument to next()
