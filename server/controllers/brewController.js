@@ -4,18 +4,23 @@ const db = require('../db.js');
 const brewController = {};
 
 brewController.getBreweries = async (req, res, next) => {
-  const userName = req.body.username;
-  const queryString = `SELECT homestate FROM users WHERE username = '${userName}'`
-  const state = await db.query(queryString);
+  const username = res.locals.username;
+  const queryString = `SELECT homestate FROM users WHERE username = '${username}'`
+  const response = await db.query(queryString);
+  //console.log(response);
+  state = response.rows[0].homestate;
+  console.log(state);
+  //const state = response[0];
 
-  queryString = `SELECT * FROM breweries WHERE brewerystate = '${state}'`
-  const breweries = await db.query(queryString);
+  const queryString2 = `SELECT * FROM breweries WHERE brewerystate = '${state}'`
+  const breweries = await db.query(queryString2);
+  console.log(breweries.fields);
   res.locals.getBreweries = breweries;
   return next();
 };
 
 brewController.addBreweriesToDatabase = async (req, res, next) => {
-  const userState = req.body.newUser.homestate;
+  const userState = res.locals.homestate;
   console.log('in addBreweryToDatabase middleware and the userstate is ', userState);
   const queryString = `SELECT EXISTS (SELECT FROM breweries WHERE brewerystate = '${userState}')`;
   //return next();
@@ -69,12 +74,13 @@ brewController.addBreweriesToDatabase = async (req, res, next) => {
 };
 
 brewController.getVisited = async (req, res, next) => {
-  let username;
-  if (req.query.username) {
-    username = req.query.username;
-  } else {
-    username = res.locals.username; //coming from addVisited controller
-  }
+  let username = res.locals.username;
+  // let username;
+  // if (req.query.username) {
+  //   username = req.query.username;
+  // } else {
+  //   username = res.locals.username; //coming from addVisited controller
+  // }
   // gets userId from a supplied username
   const userIdSelector = `SELECT id FROM users WHERE username = '${username}'`;
   const getUserId = await db.query(userIdSelector);
