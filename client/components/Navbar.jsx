@@ -4,13 +4,14 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const Navbar = (props) => {
   const user = useContext(UserContext).user;
+  const setUser = useContext(UserContext).setUser;
 
   let navigate = useNavigate();
 
-  const handleLogout = (e) => {
-    ``;
+  const handleLogout = () => {
     console.log('handleLogout');
-    document.cookie = 'BrewCookie=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    setUser(undefined);
+    navigate('/');
   };
   return (
     <>
@@ -20,7 +21,7 @@ const Navbar = (props) => {
         <ul className='nav_links'>
           {user && (
             <li>
-              <Link className='logout-Btn' to='/login' onClick={handleLogout}>
+              <Link className='logout-Btn' onClick={handleLogout}>
                 Logout
               </Link>
             </li>
