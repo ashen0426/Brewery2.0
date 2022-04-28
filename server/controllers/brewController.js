@@ -4,15 +4,7 @@ const db = require('../db.js');
 const brewController = {};
 
 brewController.getBreweries = async (req, res, next) => {
-<<<<<<< HEAD
-  const userState = req.query.homestate;
-  console.log('hi', req.query.homestate);
-  if (userState.includes(' ')) {
-    userState = userState.replace(' ', '_');
-  }
-=======
   const userState = req.params.state;
->>>>>>> main
   const options = {
     method: 'GET',
     url: `https://api.openbrewerydb.org/breweries?by_state=${userState}`,
@@ -34,12 +26,7 @@ brewController.getBreweries = async (req, res, next) => {
   }
 };
 
-<<<<<<< HEAD
-brewController.getVisited = (req, res, next) => {
-  console.log(req.query)
-=======
 brewController.getVisited = async (req, res, next) => {
->>>>>>> main
   let username;
   if (req.query.username) {
     username = req.query.username;
