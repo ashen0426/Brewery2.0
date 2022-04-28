@@ -19,7 +19,7 @@ brewController.getBreweries = async (req, res, next) => {
 };
 
 brewController.addBreweriesToDatabase = async (req, res, next) => {
-  const userState = req.body.newUser.homestate;
+  const userState = req.body.userInfo.homestate;
   console.log('in addBreweryToDatabase middleware and the userstate is ', userState);
   let queryString = `SELECT EXISTS (SELECT FROM breweries WHERE brewerystate = '${userState}')`;
   //return next();

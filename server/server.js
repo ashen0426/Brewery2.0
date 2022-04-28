@@ -42,7 +42,7 @@ app.get('/getUser/:username', userController.getUser, (req, res) => {
 
 
 app.post('/createUser', 
-  cookieController.storeUserInfo, //can store anything else that needed in frontend
+  //cookieController.storeUserInfo, //can store anything else that needed in frontend
   userController.createUser, 
   brewController.addBreweriesToDatabase, 
   cookieController.session,
