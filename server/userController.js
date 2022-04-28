@@ -27,7 +27,7 @@ userController.createUser = async (req, res, next) => {
       return next();
     } catch (err) {
       next({
-        log: `userController.createUser: ERROR: Error during creation of a new user.`,
+        log: `userController.createUser: ERROR: ${err}`,
         message: { err: 'Error occurred in userController.createUser.'}
       });
   }
@@ -86,7 +86,7 @@ userController.checkUser = (req, res, next) => {
     };
   } catch (err) {
     next({
-      log: `userController.checkUser: ERROR: Error checking for a cookie in the request object.`,
+      log: `userController.checkUser: ERROR: ${err}`,
       message: { err: 'Error occurred in userController.checkUser.'}
     });
   }
@@ -119,7 +119,7 @@ userController.deleteUser = async (req, res, next) => {
     return next();
   } catch (err) {
     next({
-      log: `userController.deleteUser: ERROR: Error deleting a row from users table.`,
+      log: `userController.deleteUser: ERROR: ${err}`,
       message: { err: 'Error occurred in userController.deleteUser.'}
     });
   }
