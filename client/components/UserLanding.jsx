@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import StateBreweries from './StateBreweries';
 import VisitedBreweries from './VisitedBreweries';
 import UserContext from './UserDetails';

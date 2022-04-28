@@ -13,24 +13,18 @@ const Navbar = (props) => {
     navigate('/');
   };
   const handleDelete = () => {
-    ``;
+
     navigate('/deleteUser');
   };
   const handleFavorites = () => {
     ``;
     navigate('/favorites');
   };
-  const handleSearch = () => {
-    ``;
-    navigate('/search');
-  };
 
   return (
     <>
       <header>
         <div className='brand nav'>FindMyBrews&#127867;</div>
-        <form onSubmit={handleSearch}></form>
-        {/* <input className='searchButton' type='submit' value='Search'>Search</input> */}
         {/*Leaving this as a UL/LI so that we want to add more navbar options */}
         <ul className='nav_links'>
           {user && (
