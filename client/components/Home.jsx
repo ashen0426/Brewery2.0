@@ -16,25 +16,27 @@ function parseCookie(cookieStr) {
 const Home = () => {
   let navigate = useNavigate()
   const user = useContext(UserContext).user;
-  console.log(user)
+  const setUser = useContext(UserContext).setUser;
 
   // check if user has a cookie in browser and one has been stored in our db
   // if so, log user in
   useEffect(() => {
-    const cookieObj = parseCookie(document.cookie);
-    console.log(cookieObj);
-    async function checkCookie() {
-      const userObj = await axios.get(`/getUser/${cookieObj.userName}`)
-      if (userObj.hasCookie) setUser(userObj);
-      else console.log('cookie not found in db')
+    if (document.cookie) {
+      const cookieObj = parseCookie(document.cookie);
+      async function checkCookie() {
+        const userObj = await axios.get(`/getUser/${cookieObj.userName}`)
+        if (userObj.hasCookie) setUser(userObj.data);
+        else console.log('cookie not found in db')
+      }
+      // only invoke the above function if there is a userName in the cookieObj
+      if (cookieObj.userName) checkCookie();
     }
-    // only invoke the above function if there is a userName in the cookieObj
-    if (cookieObj.userName) checkCookie();
   }, []);
-  console.log(user);
+  
 
   //If user is already logged in via coolies/storage (TBD by Colton) then redirect to their landing page
   useEffect(() => {
+    console.log(user);
     if (user) {
       navigate('/userlanding')
     }

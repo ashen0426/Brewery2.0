@@ -16,7 +16,6 @@ const UserLanding = () => {
     //Obtaining state upon user hitting landing page - user's state breweries and visited breweries
     const getBreweries = async () => {
       if (user) {
-        console.log('user inside useeffect', user);
         try {
           const response = await axios.get(`/api?homestate=${user.homestate}&username=${user.username}&userId=${user.id}`)
           setStateBreweries(response.data.getBreweries)
