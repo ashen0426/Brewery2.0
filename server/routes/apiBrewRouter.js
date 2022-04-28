@@ -4,8 +4,8 @@ const brewController = require('../controllers/brewController');
 
 const router = express.Router();
 
-router.get('/', brewController.getBreweries, (req, res) => {
-  return res.status(200).json(res.locals.breweries);
+router.get('/getBreweries', brewController.getVisited, brewController.getBreweries, (req, res) => {
+  return res.status(200).json(res.locals);
 });
 
 // ///////////////////////////////////////////////////////////////////////////

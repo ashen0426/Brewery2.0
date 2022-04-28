@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from 'react'
 import { Link, useNavigate, Redirect } from 'react-router-dom'
-import { useUser } from './UserDetails'
+import UserContext from './UserDetails'
 
 const Home = () => {
   let navigate = useNavigate()
-  const user = useUser();
+  const user = useContext(UserContext).user;
   console.log(user)
 
   //If user is already logged in via coolies/storage (TBD by Colton) then redirect to their landing page

@@ -9,6 +9,8 @@ const db = require("./db.js");
 
 
 const userController = require('./userController');
+const cookieController = require('./controllers/cookieController')
+const brewController = require('./controllers/brewController')
 
 const port = process.env.PORT || 3000;
 
@@ -38,9 +40,9 @@ app.get('/getUser/:username', userController.getUser, (req, res) => {
   res.status(200).json(res.locals.userInfo);
 })
 
-
-app.post('/createUser', userController.createUser,  (req, res) => {
-  res.json(res.locals.users);
+app.post('/createUser', cookieController.storeUserInfo, userController.createUser, brewController.addBreweriesToDatabase, cookieController.session, (req, res) => {
+  console.log("finished the signup process, back in server.js, res.locals is storing ", res.locals.getBreweries);
+  res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
 });
 
 
@@ -51,9 +53,12 @@ app.delete('/deleteUser',  userController.deleteUser, (req, res) => {
 
 
 
-app.post('/login', userController.verifyLogin, userController.setCookie, userController.getUser, (req, res) => {
-  res.status(200).json(res.locals.userInfo);
+app.post('/login', cookieController.storeUserInfo, userController.verifyLogin, brewController.getBreweries, (req, res) => {
+  console.log("finished the login process, back in server.js, res.locals is storing ", res.locals.getBreweries);
+  res.status(200).json(res.locals.getBreweries); // do they need userInfo to be sent back?
 });
+
+
 
 app.get('/', (req, res) => {
   res.status(200).sendFile(path.join(__dirname, '../client/template.html'));

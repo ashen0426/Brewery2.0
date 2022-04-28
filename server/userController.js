@@ -5,15 +5,24 @@ const db = require('./db.js');
 const userController = {};
 
 userController.createUser = async (req, res, next) => {
-  const { firstname, lastname, homestate, username, password } = req.body.newUser;
+  const firstname = req.body.newUser.firstname;
+  res.locals.firstname = req.body.newUser.firstname;
+  const lastname = req.body.newUser.lastname;
+  res.locals.lastname = req.body.newUser.lastname;
+  const homestate = req.body.newUser.homestate;
+  res.locals.homestate = req.body.newUser.homestate;
+  const username = req.body.newUser.username;
+  res.locals.username = req.body.newUser.username;
+  const password = req.body.newUser.password;
   if (!username || !password) {
     return next('Missing username or password in createUser');
   } else {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const queryString = `INSERT INTO users (firstname, lastname, homestate, username, password) VALUES ($1, $2, $3, $4, $5)`;
+    const queryString = `INSERT INTO users (firstname, lastname, homestate, username, password) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
     const value = [firstname, lastname, homestate, username, hashedPassword];
     try {
-      db.query(queryString, value);
+      const newUser = await db.query(queryString, value);
+      res.locals.userInfo = newUser;
       return next();
     } catch (err) {
       next({
@@ -25,7 +34,8 @@ userController.createUser = async (req, res, next) => {
 };
 
 userController.verifyLogin = async (req, res, next) => {
-  const { username, password } = req.body.userInfo;
+  const username = res.locals.username;
+  const password = res.locals.password;
   if (!username || !password) {
     return res.status(400).send('Missing username or password in userController.verifyLogin.');
   } else {
@@ -52,19 +62,19 @@ userController.verifyLogin = async (req, res, next) => {
   }
 };
 
-userController.setCookie = (req, res, next) => {
-  // set cookie with a name, value (in this case the username)
-  // httpOnly prevents the client from editing cookie in the browser
-  try {
-    res.cookie('BrewCookie', req.body.userInfo.username, { httpOnly: true });
-    return next();
-  } catch (err) {
-    next({
-      log: `userController.setCookie: ERROR: Error adding a cookie to the response object.`,
-      message: { err: 'Error occurred in userController.setCookie.'}
-    });
-  }
-};
+// userController.setCookie = async (req, res, next) => {
+//   // set cookie with a name, value (in this case the username)
+//   // httpOnly prevents the client from editing cookie in the browser
+//   try {
+//     await res.cookie('BrewCookie', req.body.userInfo.username, { httpOnly: true });
+//     return next();
+//   } catch (err) {
+//     next({
+//       log: `userController.setCookie: ERROR: Error adding a cookie to the response object.`,
+//       message: { err: 'Error occurred in userController.setCookie.'}
+//     });
+//   }
+// };
 
 userController.checkUser = (req, res, next) => {
   try {
@@ -84,13 +94,14 @@ userController.checkUser = (req, res, next) => {
 userController.getUser = async (req, res, next) => {
   const { username } = req.params;
   const returnOneUser = `SELECT * FROM users WHERE username = $1`;
+  const value = [username];
   try {
-    const response = await db.query(returnOneUser, [username]);
+    const response = await db.query(returnOneUser, value);
     res.locals.userInfo = response.rows[0];
     return next();
   } catch (err) {
     next({
-      log: `userController.getUser: ERROR: Error retrieving a row from users table.`,
+      log: `userController.getUser: ERROR: ${err}`,
       message: { err: 'Error occurred in userController.getUser.'}
     });
   }
@@ -111,19 +122,5 @@ userController.deleteUser = async (req, res, next) => {
   }
 }
 
-userController.deleteUser = async (req, res, next) => {
-    const { userId } = req.body;
-    const text = `DELETE FROM users WHERE userid = $1 RETURNING *`;
-    const values = [userId];
-    try {
-      db.query(text, values);
-      return next();
-    } catch (err) {
-      next({
-        log: `userController.deleteUser: ERROR: Error deleting a row from users table.`,
-        message: { err: 'Error occurred in userController.deleteUser.'}
-      });
-    }
-  }
 
 module.exports = userController;
