@@ -28,8 +28,8 @@ brewController.getBreweries = async (req, res, next) => {
 
 brewController.getVisited = async (req, res, next) => {
   let username;
-  if (req.params.username) {
-    username = req.params.username;
+  if (req.query.username) {
+    username = req.query.username;
   } else {
     username = res.locals.username; //coming from addVisited controller
   }

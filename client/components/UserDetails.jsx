@@ -2,30 +2,31 @@ import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 
 const UserContext = createContext();
-const UserUpdateContext = createContext();
 
-export function useUser() {
-  return useContext(UserContext)
-}
+export default UserContext;
 
-export function useUserUpdate() {
-  return useContext(UserUpdateContext)
-}
+// export function useUser() {
+//   return useContext(UserContext)
+// }
 
-export function UserProvider({ children }) {
-  const [user, setUser] = useState(undefined)
+// export function useUserUpdate() {
+//   return useContext(UserUpdateContext)
+// }
 
-  async function getUserInfo(username) {
-    setUser( async (user) => user = await axios.get(`/getUser/${username}`))
-  }
+// export function UserProvider({ children }) {
+//   const [user, setUser] = useState(undefined)
 
-  return (
-    <UserContext.Provider value={user}>
-      <UserUpdateContext.Provider value={getUserInfo}>
-        {children}
-      </UserUpdateContext.Provider>
-    </UserContext.Provider>
+//   async function getUserInfo(username) {
+//     setUser( async (user) => user = await axios.get(`/getUser/${username}`))
+//   }
 
-  )
+//   return (
+//     <UserContext.Provider value={user}>
+//       <UserUpdateContext.Provider value={getUserInfo}>
+//         {children}
+//       </UserUpdateContext.Provider>
+//     </UserContext.Provider>
 
-};
+//   )
+
+// };
