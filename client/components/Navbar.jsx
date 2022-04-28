@@ -5,14 +5,22 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 const Navbar = (props) => {
   const user = useContext(UserContext).user;
   const setUser = useContext(UserContext).setUser;
-
   let navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log('handleLogout');
-    setUser(undefined);
+    ``;
+    user = setUser(undefined);
     navigate('/');
   };
+  const handleDelete = () => {
+
+    navigate('/deleteUser');
+  };
+  const handleFavorites = () => {
+    ``;
+    navigate('/favorites');
+  };
+
   return (
     <>
       <header>
@@ -23,8 +31,11 @@ const Navbar = (props) => {
             <li>
               <Link to='/logout' className='logout-Btn' onClick={handleLogout}>
                 Logout
-              </Link>
-            </li>
+              </option>
+              <option className='delete-Btn' onClick={handleDelete}>
+                Delete Account
+              </option>
+            </select>
           )}
         </ul>
       </header>
