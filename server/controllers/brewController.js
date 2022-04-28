@@ -4,7 +4,8 @@ const db = require('../db.js');
 const brewController = {};
 
 brewController.getBreweries = async (req, res, next) => {
-  const userState = req.params.state;
+  const userState = req.query.homestate;
+  console.log('hi', req.query.homestate);
   if (userState.includes(' ')) {
     userState = userState.replace(' ', '_');
   }
@@ -30,9 +31,10 @@ brewController.getBreweries = async (req, res, next) => {
 };
 
 brewController.getVisited = (req, res, next) => {
+  console.log(req.query)
   let username;
-  if (req.params.username) {
-    username = req.params.username;
+  if (req.query.username) {
+    username = req.query.username;
   } else {
     username = res.locals.username; //coming from addVisited controller
   }

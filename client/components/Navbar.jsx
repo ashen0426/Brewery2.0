@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {useUser} from './UserDetails';
+import UserContext from './UserDetails';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const Navbar = (props) => {
-  const user = useUser();
+  const user = useContext(UserContext).user;
 
   let navigate = useNavigate();
 

@@ -52,11 +52,11 @@ userController.verifyLogin = async (req, res, next) => {
   }
 };
 
-userController.setCookie = (req, res, next) => {
+userController.setCookie = async (req, res, next) => {
   // set cookie with a name, value (in this case the username)
   // httpOnly prevents the client from editing cookie in the browser
   try {
-    res.cookie('BrewCookie', req.body.userInfo.username, { httpOnly: true });
+    await res.cookie('BrewCookie', req.body.userInfo.username, { httpOnly: true });
     return next();
   } catch (err) {
     next({
@@ -82,15 +82,21 @@ userController.checkUser = (req, res, next) => {
 }
 
 userController.getUser = async (req, res, next) => {
-  const { username } = req.params;
+  let username;
+  if (req.params.username) {
+    username = req.params.username;
+  } else {
+  username = req.body.userInfo.username;
+  }
   const returnOneUser = `SELECT * FROM users WHERE username = $1`;
+  const value = [username];
   try {
-    const response = await db.query(returnOneUser, [username]);
+    const response = await db.query(returnOneUser, value);
     res.locals.userInfo = response.rows[0];
     return next();
   } catch (err) {
     next({
-      log: `userController.getUser: ERROR: Error retrieving a row from users table.`,
+      log: `userController.getUser: ERROR: ${err}`,
       message: { err: 'Error occurred in userController.getUser.'}
     });
   }
